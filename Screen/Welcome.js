@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, StatusBar, StyleSheet, Image } from "react-native";
+import { View, Text, Button, StatusBar, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 // Importe a imagem da logo
 import Logo from "../assets/logo.png";
@@ -16,15 +16,17 @@ export default function WelcomeScreen({ navigation }) {
         />
       </View>
       <View style={styles.menu}>
-        <Text>Primeira Tela</Text>
-        <Button
-          title="Ir para a tela de Login"
-          onPress={() => navigation.navigate("LoginUser")}
-        />
-        <Button
-          title="Ir para a tela de Login 2"
-          onPress={() => navigation.navigate("LoginUser")}
-        />
+        <TouchableOpacity onPress={() => navigation.navigate("LoginUser")}>
+          <View style={styles.containerUsuario}>
+            <Text style={styles.containerTexto}>Usuário</Text>
+            <Text>Sou usuario e estou em busca de motoristas.</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginUser")}>
+          <View style={styles.containerMotorista}>
+            <Text style={styles.containerTexto}>Motorista</Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -59,4 +61,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  containerUsuario: {
+    padding: 48,
+    paddingRight: 110,
+    paddingLeft: 110,
+    marginBottom: 30,
+    backgroundColor: "#EBEBEB",
+  },
+  containerMotorista: {
+    padding: 48,
+    paddingRight: 103,
+    paddingLeft: 103,
+    backgroundColor: "#EBEBEB"
+  },
+  containerTexto: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  }
 });
