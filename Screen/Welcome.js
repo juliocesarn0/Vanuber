@@ -10,11 +10,11 @@ export default function WelcomeScreen({ navigation }) {
         <Text>Primeira Tela</Text>
         <Button
           title="Ir para a tela de Login"
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("LoginUser")}
         />
         <Button
           title="Ir para a tela de Login 2"
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("LoginUser")}
         />
       </View>
     </View>

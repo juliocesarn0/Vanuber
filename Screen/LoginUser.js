@@ -10,7 +10,7 @@ import {
   Image,
 } from "react-native";
 
-const Home = () => (
+const LoginUser = () => (
   <SafeAreaView style={styles.container}>
     <ScrollView>
       <View style={styles.logoContainer}>
@@ -149,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default LoginUser;
