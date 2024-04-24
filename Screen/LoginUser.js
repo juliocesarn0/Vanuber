@@ -8,62 +8,80 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Dimensions,
 } from "react-native";
 
-const LoginUser = () => (
-  <SafeAreaView style={styles.container}>
-    <ScrollView>
-      <View style={styles.logoContainer}>
-        <Image source={require("../assets/logo.png")} style={styles.logo} />
-      </View>
+const LoginUser = () => {
+  const screenHeight = Dimensions.get("window").height;
 
-      <View style={styles.tabContainer}>
-        {/* Componente de Aba para Login */}
-        <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Entrar</Text>
-        </TouchableOpacity>
+  return (
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <View style={styles.logoContainer}>
+          <Image source={require("../assets/logo.png")} style={styles.logo} />
+        </View>
 
-        {/* Componente de Aba para Registrar */}
-        <TouchableOpacity style={styles.tab}>
-          <Text style={styles.tabText}>Registrar</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={[styles.content, { minHeight: screenHeight }]}>
+          <View style={styles.tabContainer}>
+            <TouchableOpacity style={styles.tab}>
+              <View style={styles.tabTextContainer}>
+                <Text style={styles.tabLogin}>Entrar</Text>
+                <View style={styles.tabUnderline} />
+              </View>
+            </TouchableOpacity>
 
-      <View style={styles.tabContainer}>
-        <TouchableOpacity style={styles.textInfo}>
-          <Text>Voce pode usar seu número de telefone ou seu e-mail.</Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity style={styles.tab}>
+              <Text style={styles.tabRegister}>Registrar</Text>
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.formContainer}>
-        <TouchableOpacity style={styles.telefone}>
-          <TextInput
-            style={[styles.input, styles.dddInput]}
-            placeholder="DDD"
-          />
-          <TextInput
-            style={[styles.input, styles.numeroInput]}
-            placeholder="Numero de telefone"
-            secureTextEntry={true}
-          />
-        </TouchableOpacity>
+          <View style={styles.textInfoContainer}>
+            <Text style={styles.textInfo}>
+              Você pode usar seu número de telefone ou seu e-mail.
+            </Text>
+          </View>
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>ENTRAR</Text>
-        </TouchableOpacity>
+          <View style={styles.formContainer}>
+            <View style={styles.telefone}>
+              <TextInput
+                style={[styles.input, styles.dddInput]}
+                placeholder="DDD"
+                placeholderTextColor="#9DA1AB"
+                inputStyle={styles.input} // Adicionando inputStyle aqui
+              />
+              <TextInput
+                style={[styles.input, styles.numeroInput]}
+                placeholder="Numero de telefone"
+                secureTextEntry={true}
+                placeholderTextColor="#9DA1AB" // Definindo a cor do texto do placeholder como vermelho
+                inputStyle={styles.input} // Adicionando inputStyle aqui
+              />
+            </View>
 
-        <TouchableOpacity style={styles.textLink}>
-          <Text>Entrar pelo seu e-mail</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
-  </SafeAreaView>
-);
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>ENTRAR</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.textLink}>
+              <Text style={styles.textLinkText}>Acessar usando seu e-mail</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FCFF74",
+  },
+  content: {
     backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    borderRadius: 30,
   },
   logoContainer: {
     alignItems: "center",
@@ -71,8 +89,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   logo: {
-    width: 150,
-    height: 150,
+    width: 200,
+    height: 250,
   },
   appName: {
     fontSize: 24,
@@ -84,17 +102,43 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   tab: {
-    padding: 10,
+    paddingTop: 24,
   },
-  tabText: {
-    fontSize: 18,
+  tabTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  tabLogin: {
+    fontSize: 16,
     fontWeight: "bold",
+    textTransform: "uppercase",
+    color: "#000",
+  },
+  tabUnderline: {
+    height: 1,
+    backgroundColor: "#FCFF74",
+    position: "absolute",
+    bottom: 0,
+    left: "30%", // Definindo a posição do sublinhado
+    width: "70%", // Definindo a largura do sublinhado
+  },
+  tabRegister: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    color: "#9DA1AB",
+  },
+  textInfoContainer: {
+    alignItems: "center",
+    marginTop: 30,
+  },
+  textInfo: {
+    color: "#9DA1AB",
   },
   formContainer: {
-    padding: 20,
+    marginTop: 0,
   },
   telefone: {
-    //backgroundColor: "red",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -102,50 +146,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   input: {
-    backgroundColor: "white",
-    padding: 10,
+    padding: 5,
     paddingRight: 10,
     marginVertical: 10,
     borderRadius: 5,
     flex: 1,
   },
   dddInput: {
-    flex: 0.2, // Define a largura do campo DDD como 20% do espaço disponível
-    marginRight: 10, // Adiciona um espaço maior entre o campo DDD e o campo de número
+    flex: 0.2,
+    marginRight: 10,
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
-    textAlign: "center", // Define o alinhamento do texto como centralizado
-    color: "#9DA1AB",
+    textAlign: "center",
+    color: "red", // Definindo a cor do texto como vermelho
   },
   numeroInput: {
-    flex: 0.8, // Define a largura do campo Número como 80% do espaço disponível
+    flex: 0.8,
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
-    color: "#9DA1AB",
+    color: "blue", // Definindo a cor do texto como azul
   },
   button: {
     backgroundColor: "#FCFF74",
-    paddingVertical: 14, // Reduz a altura do botão
-    paddingHorizontal: 16, // Reduz o espaço interno horizontal do botão
+    paddingVertical: 14,
+    paddingHorizontal: 16,
     borderRadius: 24,
     marginTop: 20,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "center",
-    width: 150, // Define a largura do botão em pixels
+    width: 150,
   },
   buttonText: {
     color: "#000",
-    fontSize: 12,
+    fontSize: 16,
   },
   textLink: {
     marginTop: 30,
     alignItems: "center",
   },
-  textInfo: {
-    color: "#9DA1AB", // Define a cor do texto como cinza
-    marginTop: 30,
-    alignItems: "center",
+  textLinkText: {
+    color: "#000",
+    textDecorationLine: "underline",
   },
 });
 
