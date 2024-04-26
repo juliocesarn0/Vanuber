@@ -1,7 +1,8 @@
-import {React, useState} from "react";
+import React from "react";
 import {
   View,
   Text,
+  Button,
   StatusBar,
   StyleSheet,
   Image,
@@ -11,21 +12,11 @@ import {
 import { useFonts } from "@expo-google-fonts/poppins";
 
 // Importe a imagem da logo
-import Logo from "../assets/logo-2.png";
+import Logo from "../assets/logo.png";
 // Importe a imagem do usuário
 import UsuarioImage from "../assets/usuario.png";
-// Importe a imagem do motorista
-import MotoristaImage from "../assets/motorista.png";
 
 export default function WelcomeScreen({ navigation }) {
-
-  
-  const [userType, setUserType] = useState(null);
-
-  const [isUsuarioSelected, setIsUsuarioSelected] = useState(false);
-  const [isMotoristaSelected, setIsMotoristaSelected] = useState(false);
-
-
   // UseFonts para carregar a fonte
   let [fontsLoaded] = useFonts({
     "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
@@ -40,15 +31,11 @@ export default function WelcomeScreen({ navigation }) {
       <StatusBar style="auto" />
       <View style={styles.header}>
         {/* Use a imagem importada como a fonte da imagem */}
+        <Image style={styles.logo} source={Logo} />
       </View>
-      <Image style={styles.logo} source={Logo} />
       <View style={styles.menu}>
-        <TouchableOpacity onPress={() => {
-          setIsUsuarioSelected(true);
-          setIsMotoristaSelected(false);
-          setUserType("usuario");
-        }} >
-          <View style={[styles.containerUsuario, isUsuarioSelected && styles.selectedButton]}>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginUser")}>
+          <View style={styles.containerUsuario}>
             <View style={styles.usuarioContent}>
               <Image style={styles.usuarioImage} source={UsuarioImage} />
               <View style={styles.usuarioText}>
@@ -63,25 +50,9 @@ export default function WelcomeScreen({ navigation }) {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {
-          setIsUsuarioSelected(false);
-          setIsMotoristaSelected(true);
-          setUserType("motorista");
-        }}>
-          <View style={[styles.containerMotorista, isMotoristaSelected && styles.selectedButton]}>
-              <Image style={styles.motoristaImage} source={MotoristaImage} />
-              <View style={styles.usuarioText}>
-                <Text style={[styles.containerTexto, styles.textoCentralizado]}>Motorista</Text>
-                <Text style={styles.textoConteudoMotorista}>
-                  Sou motoristas e estou em busca de passageiros.
-                </Text>
-              </View>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity disabled={!userType} onPress={() => navigation.navigate("LoginUser")} >
-          <View style={styles.continuarBtn}>
-            <Text style={styles.btnContinuarText}>Continuar</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("LoginUser")}>
+          <View style={styles.containerMotorista}>
+            <Text style={styles.containerTexto}>Motorista</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -92,7 +63,7 @@ export default function WelcomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#FFFF",
   },
   header: {
     height: 100,
@@ -105,55 +76,33 @@ const styles = StyleSheet.create({
     position: "relative", // Necessário para usar a posição absoluta na imagem
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     borderRadius: 50,
     position: "absolute", // Posicionamento absoluto em relação ao cabeçalho
-    top: 40, // Move a imagem para cima para sobrepôr a linha do cabeçalho
+    top: 50, // Move a imagem para cima para sobrepôr a linha do cabeçalho
     zIndex: 1, // Define a ordem de empilhamento da imagem para ficar na frente de outros elementos
-    left: 128
   },
   menu: {
     flex: 2,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#FFFF",
     alignItems: "center",
     justifyContent: "center",
   },
   containerUsuario: {
-    marginBottom: 20,
-    backgroundColor: "#FFF",
+    marginBottom: 30,
+    backgroundColor: "#EBEBEB",
     borderRadius: 20,
     flexDirection: "row",
     alignItems: "center",
     maxWidth: "80%",
     alignSelf: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25, // Opacidade da sombra
-    shadowRadius: 3.84, // Raio da sombra (propriedade recomendada pela documentação do React Native)
-    elevation: 5, // Elevação (sombra) para Android
   },
   containerMotorista: {
-    marginBottom: 200,
-    backgroundColor: "#FFF",
-    borderRadius: 20,
-    flexDirection: "row",
-    alignItems: "center",
-    maxWidth: "80%",
-    alignSelf: "center",
-    paddingBottom: 10,
-    paddingTop: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25, // Opacidade da sombra
-    shadowRadius: 3.84, // Raio da sombra (propriedade recomendada pela documentação do React Native)
-    elevation: 5, // Elevação (sombra) para Android
+    padding: 48,
+    paddingRight: 103,
+    paddingLeft: 103,
+    backgroundColor: "#EBEBEB",
   },
   containerTexto: {
     fontWeight: "regular",
@@ -168,16 +117,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#6E6E6E",
   },
-  textoConteudoMotorista: {
-    fontSize: 12,
-    color: "#6E6E6E",
-  },
   usuarioContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-  },
-  motoristaContent: {
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
@@ -187,27 +127,7 @@ const styles = StyleSheet.create({
     height: 90,
     marginRight: 10,
   },
-  motoristaImage: {
-    width: 90,
-    height: 90,
-    marginLeft: 11,
-  },
   usuarioText: {
     flex: 1,
   },
-  continuarBtn: {
-    backgroundColor: "#FCFF74",
-    padding: 12,
-    paddingLeft: 118,
-    paddingRight: 118,
-    borderRadius: 24
-  },
-  btnContinuarText: {
-    fontFamily: "Poppins-Regular",
-    fontSize: 17
-  },
-  selectedButton: {
-    borderWidth: 2,
-    borderColor: "yellow", 
-  },  
 });
