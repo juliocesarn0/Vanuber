@@ -1,12 +1,19 @@
 import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
+import { useNavigation } from "@react-navigation/native"; // Importe o hook de navegação
 
 const HomeUser = () => {
   let [fontsLoaded] = useFonts({
     "Montserrat-Medium": require("../assets/fonts/Montserrat-Medium.ttf"),
     "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
   });
+
+  const navigation = useNavigation(); // Obtém o objeto de navegação
+
+  const handleContinue = () => {
+    navigation.navigate("DestinoUser"); // Navega para a próxima tela ao clicar no botão
+  };
 
   if (!fontsLoaded) {
     return null; // Ou uma tela de carregamento
@@ -44,7 +51,10 @@ const HomeUser = () => {
             style={styles.bottomImage}
           />
         </View>
-        <TouchableOpacity style={styles.continueButton}>
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={handleContinue} // Chama a função ao pressionar o botão
+        >
           <Text style={styles.continueButtonText}>Procurar Destino</Text>
         </TouchableOpacity>
       </View>
@@ -63,7 +73,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingTop: 40,
-
     borderBottomColor: "#e0e0e0",
   },
   leftHeader: {
