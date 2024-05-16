@@ -9,13 +9,15 @@ import HomeUserScreen from "./Screen/HomeUser";
 import DestinoUserScreen from "./Screen/DestinoUser";
 import EnderecoUserScreen from "./Screen/EnderecoUser";
 import ListaMotoristaScreen from "./Screen/ListaMotorista";
+import HomeMotoristaScreen from "./Screen/Motorista/HomeMotorista";
+import DocumentosMotoristaScreen from "./Screen/Motorista/DocumentosMotorista";
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeUser">
+      <Stack.Navigator initialRouteName="HomeMotorista">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -59,6 +61,23 @@ const App = () => {
         <Stack.Screen
           name="ListaMotorista"
           component={ListaMotoristaScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Lista de Motorista</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+          }}
+        />
+        <Stack.Screen
+          name="HomeMotorista"
+          component={HomeMotoristaScreen}
+          options={{ headerShown: false }} // Oculta a barra de navegação na tela HomeUser
+        />
+        <Stack.Screen
+          name="DocumentosMotorista"
+          component={DocumentosMotoristaScreen}
           options={{
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
