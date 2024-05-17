@@ -23,7 +23,7 @@
     "react-native": "0.74.1",
     "react-native-fonts": "^0.0.0",
     "react-native-gesture-handler": "~2.16.1",
-    "react-native-masked-text": "^1.13.0",
+    "react-native-masked-text": "^1.12.5",
     "react-native-web": "^0.19.11"
   },
   "devDependencies": {

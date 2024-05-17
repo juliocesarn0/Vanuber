@@ -2,11 +2,12 @@ import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
+import Footer from "../../components/FooterMotorista";
 
 const HomeMotorista = () => {
   let [fontsLoaded] = useFonts({
     "Montserrat-Medium": require("../../assets/fonts/Montserrat-Medium.ttf"),
-    // Caminho relativo a partir de 'HomeMotorista.js'
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
   const navigation = useNavigation();
@@ -35,7 +36,9 @@ const HomeMotorista = () => {
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomContent}>
-          <Text style={[styles.bottomText, { textAlign: 'center' }]}>Atualizar vans e documentos</Text>
+          <Text style={[styles.bottomText, { textAlign: "center" }]}>
+            Atualizar vans e documentos
+          </Text>
           <Image
             resizeMode="contain"
             source={require("../../assets/info.png")}
@@ -49,6 +52,7 @@ const HomeMotorista = () => {
           <Text style={styles.continueButtonText}>Cadastrar documentos</Text>
         </TouchableOpacity>
       </View>
+      <Footer navigation={navigation} />
     </View>
   );
 };
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
   bottomImage: {
     width: 20,
     height: 20,
-    marginLeft: 'auto', // Move para o canto direito
+    marginLeft: "auto", // Move para o canto direito
   },
   continueButton: {
     backgroundColor: "#f2f2f2",

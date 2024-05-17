@@ -11,14 +11,14 @@ const ListaMotorista = () => {
       {/* Container 1 */}
       <View style={styles.card}>
         <Image
-          source={require("../assets/ricardo.png")} // Exemplo de foto do motorista
+          source={require("../../assets/ricardo.png")} // Exemplo de foto do motorista
           style={styles.avatar}
         />
         <View style={styles.textContainer}>
           <Text style={styles.cardText}>Joãozinho da Silva</Text>
         </View>
         <Image
-          source={require("../assets/balaozinho.png")}
+          source={require("../../assets/balaozinho.png")}
           style={styles.icon}
         />
       </View>
@@ -26,14 +26,14 @@ const ListaMotorista = () => {
       {/* Container 2 */}
       <View style={styles.card}>
         <Image
-          source={require("../assets/ricardo.png")} // Exemplo de foto do motorista
+          source={require("../../assets/ricardo.png")} // Exemplo de foto do motorista
           style={styles.avatar}
         />
         <View style={styles.textContainer}>
           <Text style={styles.cardText}>Joãozinho da Silva</Text>
         </View>
         <Image
-          source={require("../assets/balaozinho.png")}
+          source={require("../../assets/balaozinho.png")}
           style={styles.icon}
         />
       </View>
@@ -41,14 +41,14 @@ const ListaMotorista = () => {
       {/* Container 3 */}
       <View style={styles.card}>
         <Image
-          source={require("../assets/ricardo.png")} // Exemplo de foto do motorista
+          source={require("../../assets/ricardo.png")} // Exemplo de foto do motorista
           style={styles.avatar}
         />
         <View style={styles.textContainer}>
           <Text style={styles.cardText}>Joãozinho da Silva</Text>
         </View>
         <Image
-          source={require("../assets/balaozinho.png")}
+          source={require("../../assets/balaozinho.png")}
           style={styles.icon}
         />
       </View>

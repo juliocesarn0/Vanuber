@@ -5,8 +5,8 @@ import { useNavigation } from "@react-navigation/native"; // Importe o hook de n
 
 const HomeUser = () => {
   let [fontsLoaded] = useFonts({
-    "Montserrat-Medium": require("../assets/fonts/Montserrat-Medium.ttf"),
-    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
+    "Montserrat-Medium": require("../../assets/fonts/Montserrat-Medium.ttf"),
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
   const navigation = useNavigation(); // Obtém o objeto de navegação
@@ -25,7 +25,7 @@ const HomeUser = () => {
         <View style={styles.leftHeader}>
           <Image
             resizeMode="contain"
-            source={require("../assets/ricardo.png")}
+            source={require("../../assets/ricardo.png")}
             style={styles.avatar}
           />
           <Text style={styles.greetingText}>Olá, Ricardo!</Text>
@@ -33,7 +33,7 @@ const HomeUser = () => {
         <TouchableOpacity style={styles.rightHeader}>
           <Image
             resizeMode="contain"
-            source={require("../assets/sininho.png")}
+            source={require("../../assets/sininho.png")}
             style={styles.icon}
           />
         </TouchableOpacity>
@@ -47,7 +47,7 @@ const HomeUser = () => {
           </Text>
           <Image
             resizeMode="contain"
-            source={require("../assets/motoristazinho.png")} // Imagem do motorista
+            source={require("../../assets/motoristazinho.png")} // Imagem do motorista
             style={styles.bottomImage}
           />
         </View>

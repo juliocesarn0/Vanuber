@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     fontSize: 12,
     color: "#8A898E",
+    fontFamily: "Montserrat-Medium"
   },
   input: {
     flexDirection: "row", // Manter o layout padrão de linha
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#8A898E",
     borderRadius: 5,
-    paddingVertical: 8,
+    paddingVertical: 5,
     paddingHorizontal: 10,
     color: "#8A898E",
   },
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 50,
     borderRadius: 25,
-    marginTop: "auto",
+    marginTop: 50,
   },
   buttonText: {
     color: "#515151",

@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
-    maxWidth: "90%",
   },
   motoristaContent: {
     flexDirection: "row",
