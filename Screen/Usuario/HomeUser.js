@@ -2,6 +2,9 @@ import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native"; // Importe o hook de navegação
+import { SafeAreaView } from "react-native-web";
+import { ScrollView } from "react-native-gesture-handler";
+import FooterUser from "../../components/FooterUser";
 
 const HomeUser = () => {
   let [fontsLoaded] = useFonts({
@@ -20,52 +23,54 @@ const HomeUser = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.leftHeader}>
-          <Image
-            resizeMode="contain"
-            source={require("../../assets/ricardo.png")}
-            style={styles.avatar}
-          />
-          <Text style={styles.greetingText}>Olá, Ricardo!</Text>
-        </View>
-        <TouchableOpacity style={styles.rightHeader}>
-          <Image
-            resizeMode="contain"
-            source={require("../../assets/sininho.png")}
-            style={styles.icon}
-          />
-        </TouchableOpacity>
-      </View>
+      <View style={styles.container}>
+          <View style={styles.header}>
+            <View style={styles.leftHeader}>
+              <Image
+                resizeMode="contain"
+                source={require("../../assets/ricardo.png")}
+                style={styles.avatar}
+              />
+              <Text style={styles.greetingText}>Olá, Ricardo!</Text>
+            </View>
+            <TouchableOpacity style={styles.rightHeader}>
+              <Image
+                resizeMode="contain"
+                source={require("../../assets/sininho.png")}
+                style={styles.icon}
+              />
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.bottomContainer}>
-        <View style={styles.bottomContent}>
-          <Text style={styles.bottomText}>
-            Procure o primeiro destino para encontrar o melhor motorista para
-            lhe atender
-          </Text>
-          <Image
-            resizeMode="contain"
-            source={require("../../assets/motoristazinho.png")} // Imagem do motorista
-            style={styles.bottomImage}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={handleContinue} // Chama a função ao pressionar o botão
-        >
-          <Text style={styles.continueButtonText}>Procurar Destino</Text>
-        </TouchableOpacity>
+          <View style={styles.bottomContainer}>
+            <View style={styles.bottomContent}>
+              <Text style={styles.bottomText}>
+                Procure o primeiro destino para encontrar o melhor motorista
+                para lhe atender
+              </Text>
+              <Image
+                resizeMode="contain"
+                source={require("../../assets/motoristazinho.png")} // Imagem do motorista
+                style={styles.bottomImage}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.continueButton}
+              onPress={handleContinue} // Chama a função ao pressionar o botão
+            >
+              <Text style={styles.continueButtonText}>Procurar Destino</Text>
+            </TouchableOpacity>
+          </View>
+          <FooterUser navigation={navigation} />
       </View>
-    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff", // Fundo padrão
+    justifyContent: "space-between",
+    backgroundColor: "#ffffff"
   },
   header: {
     flexDirection: "row",

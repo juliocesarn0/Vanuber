@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 
-const Footer = ({ navigation }) => {
+const FooterUser = () => {
+  const navigation = useNavigation();
+  const [selectedIcon, setSelectedIcon] = useState("HomeUser");
+
   const handleNavigation = (screen) => {
-    navigation.navigate(screen);
+    navigation.navigate(screen, {}, () => setSelectedIcon(screen));
   };
+
+  // Hook para sincronizar o estado selecionado com a rota atual
+  const routeName = useNavigationState(state => state.routes[state.index].name);
+  useEffect(() => {
+    setSelectedIcon(routeName);
+  }, [routeName]);
 
   return (
     <View style={styles.container}>
@@ -18,9 +28,15 @@ const Footer = ({ navigation }) => {
         >
           <Image
             source={require("../assets/Footer/homeIcon.png")}
-            style={styles.footerIcon}
+            style={[
+              styles.footerIcon,
+              selectedIcon === "HomeUser" && styles.selectedFooterIcon,
+            ]}
           />
-          <Text style={styles.footerText}>Home</Text>
+          <Text style={[
+              styles.footerText,
+              selectedIcon === "HomeUser" && styles.selectedFooterText,
+            ]}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleNavigation("Motorista")}
@@ -38,7 +54,10 @@ const Footer = ({ navigation }) => {
         >
           <Image
             source={require("../assets/Footer/chatIcon.png")}
-            style={styles.footerIcon}
+            style={[
+              styles.footerIcon,
+              selectedIcon === "ChatUser" && styles.selectedFooterIcon,
+            ]}
           />
           <Text style={styles.footerText}>Chat</Text>
         </TouchableOpacity>
@@ -48,9 +67,15 @@ const Footer = ({ navigation }) => {
         >
           <Image
             source={require("../assets/Footer/carteiraIcon.png")}
-            style={styles.footerIcon}
+            style={[
+              styles.footerIcon,
+              selectedIcon === "CarteiraUser" && styles.selectedFooterIcon,
+            ]}
           />
-          <Text style={styles.footerText}>Carteira</Text>
+          <Text style={[
+              styles.footerText,
+              selectedIcon === "CarteiraMotorista" && styles.selectedFooterText,
+            ]}>Carteira</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -85,6 +110,12 @@ const styles = StyleSheet.create({
     color: "#515151",
     fontSize: 14,
   },
+  selectedFooterIcon: {
+    tintColor: "#F2CB05", // Mude para a cor desejada quando o ícone estiver selecionado
+  },
+  selectedFooterText: {
+    color: "#F2CB05", // Mude para a cor desejada quando o texto estiver selecionado
+  },
 });
 
-export default Footer;
+export default FooterUser;
