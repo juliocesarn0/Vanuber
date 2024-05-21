@@ -26,7 +26,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeUser">
+      <Stack.Navigator initialRouteName="Welcome">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -184,7 +184,21 @@ const App = () => {
         <Stack.Screen
           name="CarteiraMotorista"
           component={CarteiraMotoristaScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Carteira</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
         />
         <Stack.Screen
           name="ChatMotorista"
