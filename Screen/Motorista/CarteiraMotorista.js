@@ -2,8 +2,12 @@ import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import Footer from "../../components/FooterMotorista";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useNavigation } from '@react-navigation/native';
+
 
 const CarteiraMotorista = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <View style={styles.rectangleContainer}>
@@ -13,7 +17,7 @@ const CarteiraMotorista = () => {
 
           <Text style={styles.listaPassageiros}>Lista de passageiros</Text>
           <View style={styles.passageiros}>
-            <TouchableOpacity style={styles.passageiro}>
+            <TouchableOpacity style={styles.passageiro} onPress={() => navigation.navigate('PagamentoMotorista')}>
               <Image
                 source={require("../../assets/usuario.png")}
                 style={styles.fotoPassageiro}
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
     fontWeight: "black",
-    left: 20,
+    left: 5,
     top: 15,
     fontFamily: "Poppins-Regular",
   },
@@ -70,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "black",
     fontFamily: "Poppins-Regular",
-    left: 20,
+    left: 5,
   },
   rectangleContainer: {
     flex: 4,
@@ -87,7 +91,9 @@ const styles = StyleSheet.create({
     position: "relative",
     shadowOffset: { width: 0, height: 2 }, // Deslocamento da sombra
     shadowOpacity: 0.25, // Opacidade da sombra
-    shadowRadius: 3.84, // Raio da sombra
+    shadowRadius: 3.84, // Raio da sombra,
+    marginHorizontal: 30,
+    marginVertical: 30,
   },
   balanceContainer: {
     position: "absolute",
@@ -109,16 +115,17 @@ const styles = StyleSheet.create({
   },
   passageiros: {
     top: 70,
-    left: 10,
   },
   passageiro: {
-    width: 400,
+    width: 340,
     height: 50,
     borderRadius: 15,
     margin: 10,
+    backgroundColor: '#FFF',
     shadowOffset: { width: 0, height: 2 }, // Deslocamento da sombra
     shadowOpacity: 0.25, // Opacidade da sombra
     shadowRadius: 3.84, // Raio da sombra
+    elevation: 5,
     flexDirection: "row",
   },
   fotoPassageiro: {
@@ -133,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "black",
     fontFamily: "Poppins-Regular",
-    marginLeft: 120,
+    marginLeft: 65,
     top: 13,
   },
   status: {
@@ -141,7 +148,7 @@ const styles = StyleSheet.create({
     fontWeight: "black",
     fontFamily: "Poppins-Regular",
     color: "#42FF00",
-    marginLeft: 100,
+    marginLeft: 90,
     top: 13,
   },
   vector: {
@@ -159,7 +166,7 @@ const styles = StyleSheet.create({
     borderColor: '#DEE2E6',
     borderWidth: 1,
     borderRadius: 15,
-    left: 70,
+    left: 30,
   },
   btnText: {
     textAlign: "center",

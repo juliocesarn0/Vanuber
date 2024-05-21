@@ -18,6 +18,7 @@ import BairroMotoristaScreen from "./Screen/Motorista/BairroMotorista";
 import ConfirmacaoMotoristaScreen from "./Screen/Motorista/ConfirmacaoMotorista";
 import CarteiraMotoristaScreen from "./Screen/Motorista/CarteiraMotorista";
 import ChatMotoristaScreen from "./Screen/Motorista/ChatMotorista";
+import PagamentoMotoristaScreen from "./Screen/Motorista/PagamentoMotorista";
 // Importação do Footer (se necessário)
 import Footer from "./components/FooterMotorista";
 
@@ -26,7 +27,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Navigator initialRouteName="HomeMotorista">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -188,6 +189,25 @@ const App = () => {
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
                 <Text style={styles.headerTitle}>Carteira</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="PagamentoMotorista"
+          component={PagamentoMotoristaScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Motorista</Text>
               </View>
             ),
             headerStyle: styles.header,
