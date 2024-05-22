@@ -21,6 +21,7 @@ import ChatMotoristaScreen from "./Screen/Motorista/ChatMotorista";
 import PagamentoMotoristaScreen from "./Screen/Motorista/PagamentoMotorista";
 import CarteiraUserScreen from "./Screen/Usuario/CarteiraUser";
 import PagamentoUserScreen from "./Screen/Usuario/PagamentoUser";
+import LoginMotoristaScreen from "./Screen/Motorista/LoginMotorista";
 // Importação do Footer (se necessário)
 import Footer from "./components/FooterMotorista";
 
@@ -29,7 +30,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeUser">
+      <Stack.Navigator initialRouteName="LoginMotorista">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -164,6 +165,11 @@ const App = () => {
               />
             ),
           }}
+        />
+        <Stack.Screen
+          name="LoginMotorista"
+          component={LoginMotoristaScreen}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="DestinosMotorista"
