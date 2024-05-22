@@ -19,6 +19,8 @@ import ConfirmacaoMotoristaScreen from "./Screen/Motorista/ConfirmacaoMotorista"
 import CarteiraMotoristaScreen from "./Screen/Motorista/CarteiraMotorista";
 import ChatMotoristaScreen from "./Screen/Motorista/ChatMotorista";
 import PagamentoMotoristaScreen from "./Screen/Motorista/PagamentoMotorista";
+import CarteiraUserScreen from "./Screen/Usuario/CarteiraUser";
+import PagamentoUserScreen from "./Screen/Usuario/PagamentoUser";
 // Importação do Footer (se necessário)
 import Footer from "./components/FooterMotorista";
 
@@ -27,7 +29,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeMotorista">
+      <Stack.Navigator initialRouteName="HomeUser">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -70,6 +72,44 @@ const App = () => {
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
                 <Text style={styles.headerTitle}>Endereço de origem</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="CarteiraUser"
+          component={CarteiraUserScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Carteira</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="PagamentoUser"
+          component={PagamentoUserScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Gabriela</Text>
               </View>
             ),
             headerStyle: styles.header,
@@ -207,7 +247,7 @@ const App = () => {
           options={{
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
-                <Text style={styles.headerTitle}>Motorista</Text>
+                <Text style={styles.headerTitle}>Gabriela</Text>
               </View>
             ),
             headerStyle: styles.header,

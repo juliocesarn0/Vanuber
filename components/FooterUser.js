@@ -62,7 +62,7 @@ const FooterUser = () => {
           <Text style={styles.footerText}>Chat</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => handleNavigation("Carteira")}
+          onPress={() => handleNavigation("CarteiraUser")}
           style={styles.footerItem}
         >
           <Image
