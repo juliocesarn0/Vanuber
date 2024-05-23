@@ -16,7 +16,9 @@ import EnderecoUserScreen from "./EnderecoUser";
 
 const DestinoUser = () => {
   const navigation = useNavigation();
-  const [nome, setNome] = useState(""); // Estado para armazenar o nome inserido
+  const [estado, setEstado] = useState(""); // Estado para armazenar o nome inserido
+  const [cidade, setCidade] = useState("");
+  const [local, setLocal] = useState("");
   const [periodoOptionsVisible, setPeriodoOptionsVisible] = useState(false);
   const [periodo, setPeriodo] = useState(""); // Estado para armazenar o período selecionado
 
@@ -35,16 +37,22 @@ const DestinoUser = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"} // Comportamento para ajustar a visualização quando o teclado é exibido
     >
       <View style={styles.formContainer}>
+      <Text style={styles.label}>Estado:</Text>
+        <TextInput
+          style={styles.input}
+          value={estado}
+          onChangeText={(text) => setEstado(text)}
+        />
         <Text style={styles.label}>Cidade:</Text>
         <TextInput
           style={styles.input}
-          value={nome}
-          onChangeText={(text) => setNome(text)}
+          value={cidade}
+          onChangeText={(text) => setCidade(text)}
         />
         <Text style={styles.label}>Local:</Text>
         <TextInput
           style={styles.input}
-          value={nome}
+          value={local}
           onChangeText={(text) => setLocal(text)}
         />
         <Text style={styles.label}>Período:</Text>

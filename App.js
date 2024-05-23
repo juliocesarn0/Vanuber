@@ -22,6 +22,8 @@ import PagamentoMotoristaScreen from "./Screen/Motorista/PagamentoMotorista";
 import CarteiraUserScreen from "./Screen/Usuario/CarteiraUser";
 import PagamentoUserScreen from "./Screen/Usuario/PagamentoUser";
 import LoginMotoristaScreen from "./Screen/Motorista/LoginMotorista";
+import ChatUserScreen from "./Screen/Usuario/ChatUser";
+import OfertaMotoristaScreen from "./Screen/Motorista/OfertaMotorista";
 // Importação do Footer (se necessário)
 import Footer from "./components/FooterMotorista";
 
@@ -30,7 +32,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginMotorista">
+      <Stack.Navigator initialRouteName="HomeMotorista">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -92,6 +94,25 @@ const App = () => {
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
                 <Text style={styles.headerTitle}>Carteira</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="ChatUser"
+          component={ChatUserScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Júlio Cesar</Text>
               </View>
             ),
             headerStyle: styles.header,
@@ -269,8 +290,42 @@ const App = () => {
         <Stack.Screen
           name="ChatMotorista"
           component={ChatMotoristaScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Chat</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
         />
+        <Stack.Screen
+          name="OfertaMotorista"
+          component={OfertaMotoristaScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Gabriela</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+      
       </Stack.Navigator>
     </NavigationContainer>
   );
