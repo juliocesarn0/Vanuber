@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, Image, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import Footer from "../../components/FooterMotorista";
+import { TextInput } from "react-native-gesture-handler";
 
 const OfertaMotorista = () => {
   return (
@@ -20,22 +21,35 @@ const OfertaMotorista = () => {
         <TouchableOpacity style={styles.ofertaBtn}>
           <Text style={styles.ofertaBtnTxt}>OFERECER OFERTA</Text>
         </TouchableOpacity>
-
-        <View style={styles.caixaDeMensagem}>
-                <Text style={styles.caixaTxt}>Mensagem</Text>
-                <TouchableOpacity>
-                    <Image 
-                        source={require("../../assets/icon-audio.png")}
-                        style={styles.iconAudio}
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Image 
-                        source={require("../../assets/iconEnviar.png")}
-                        style={styles.iconEnviar}
-                    />
-                </TouchableOpacity>
-            </View>
+      
+      <KeyboardAvoidingView style={styles.caixaDeMensagemContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <TextInput 
+            style={styles.caixaDeMensagem}
+            placeholder="Mensagem"
+            placeholderTextColor='#000'
+            keyboardType="default"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <View style={styles.containerIconAudio}>
+            <TouchableOpacity focusable={false}>
+                <Image 
+                    source={require("../../assets/icon-audio.png")}
+                    style={styles.iconAudio}
+                />
+            </TouchableOpacity>
+          </View>
+          
+          <View style={styles.containerIconEnviar}>
+            <TouchableOpacity focusable={false}>
+                <Image 
+                    source={require("../../assets/iconEnviar.png")}
+                    style={styles.iconEnviar}
+                />
+            </TouchableOpacity>
+          </View>
+      </KeyboardAvoidingView>
+          
       </View>
       <Footer />
     </View>
@@ -59,6 +73,11 @@ const styles = StyleSheet.create({
       top: 6,
       maxWidth: "85%",
     },
+    caixaDeMensagemContainer: {
+      width: "100%",
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
     containerMensagemUsuario: {
       width: 252,
       height: 50,
@@ -66,7 +85,7 @@ const styles = StyleSheet.create({
       borderTopLeftRadius: 25,
       borderTopRightRadius: 25,
       borderBottomRightRadius: 25,
-      bottom: 80,
+      bottom: 60,
       right: 15
     },
     iconUser: {
@@ -74,7 +93,7 @@ const styles = StyleSheet.create({
       height: 30, // Altura do círculo
       borderRadius: 50, // Metade da largura e altura para formar um círculo
       right: 160,
-      bottom: 5
+      top: 10
     },
     containerMensagemMotorista: {
       width: 205,
@@ -83,7 +102,7 @@ const styles = StyleSheet.create({
       borderBottomLeftRadius: 25,
       borderBottomRightRadius: 25,
       backgroundColor: "#E2E2E2",
-      bottom: 50,
+      bottom: 23,
       left: 66
     },
     mensagemMotorista: {
@@ -93,7 +112,7 @@ const styles = StyleSheet.create({
       top: 15,
     },
     ofertaBtn: {
-      top: 280,
+      top: 315,
       width: "90%",
       backgroundColor: "#F2E205",
       height: 55,
@@ -111,7 +130,7 @@ const styles = StyleSheet.create({
       width: "90%",
       height: 50,
       backgroundColor: '#FFF',
-      top: 299,
+      top: 330,
       shadowColor: "#000",
       shadowOffset: {
       width: 0,
@@ -121,18 +140,15 @@ const styles = StyleSheet.create({
       shadowRadius: 3.84,
       elevation: 5,
       borderRadius: 45,
+      paddingLeft: 20
       },
       iconAudio: {
           width: 30,
           height: 30,
-          left: 180,
-          top: 10
       },
       iconEnviar: {
           width: 20,
           height: 20,
-          left: 195,
-          top: 15
       },
       caixaTxt: {
           left: 20,
@@ -140,6 +156,21 @@ const styles = StyleSheet.create({
           fontSize: 14,
           fontFamily: 'Poppins-Regular',
           top: 14
+      },
+      containerIconAudio: {
+        left: 115,
+        top: 290,
+        width: 30,
+        height: 30
+      },
+      containerIconEnviar: {
+        left: 148,
+        top: 265,
+        width: 20,
+        height: 20,
+      },
+      input: {
+        flex: 12
       }
   });
   

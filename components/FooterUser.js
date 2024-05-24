@@ -23,7 +23,7 @@ const FooterUser = () => {
       {/* Rodapé fixado na parte inferior da tela */}
       <View style={styles.footer}>
         <TouchableOpacity
-          onPress={() => handleNavigation("HomeMotorista")}
+          onPress={() => handleNavigation("HomeUser")}
           style={styles.footerItem}
         >
           <Image
@@ -39,12 +39,15 @@ const FooterUser = () => {
             ]}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => handleNavigation("Motorista")}
+          onPress={() => handleNavigation("MotoristaUser")}
           style={styles.footerItem}
         >
           <Image
             source={require("../assets/Footer/motoristaIcon.png")}
-            style={styles.footerIcon}
+            style={[
+              styles.footerIcon,
+              selectedIcon === "MotoristaUser" && styles.selectedFooterIcon,
+            ]}
           />
           <Text style={styles.footerText}>Motorista</Text>
         </TouchableOpacity>

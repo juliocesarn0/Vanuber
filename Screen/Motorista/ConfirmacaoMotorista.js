@@ -12,6 +12,7 @@ const ConfirmacaoMotorista = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.content}>
       <Image
         source={require("../../assets/caixaEmail.png")}
         style={styles.image}
@@ -25,19 +26,23 @@ const ConfirmacaoMotorista = () => {
       <TouchableOpacity style={styles.button} onPress={handleVoltarInicio}>
         <Text style={styles.buttonText}>Voltar para o Início</Text>
       </TouchableOpacity>
-      <Footer navigation={navigation} />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  content: {
+    flex: 1, // Garantir que o conteúdo ocupe o espaço disponível
+    alignItems: 'center',
+    paddingBottom: 100, // Adiciona um preenchimento inferior para que o conteúdo não fique atrás do footer
+  },
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
     paddingVertical: 50,
     justifyContent: "center",
-    alignItems: "center",
   },
   image: {
     width: 200,

@@ -24,6 +24,8 @@ import PagamentoUserScreen from "./Screen/Usuario/PagamentoUser";
 import LoginMotoristaScreen from "./Screen/Motorista/LoginMotorista";
 import ChatUserScreen from "./Screen/Usuario/ChatUser";
 import OfertaMotoristaScreen from "./Screen/Motorista/OfertaMotorista";
+import MotoristaScreen from "./Screen/Motorista/Motorista";
+import MotoristaUserScreen from "./Screen/Usuario/MotoristaUser";
 // Importação do Footer (se necessário)
 import Footer from "./components/FooterMotorista";
 
@@ -32,7 +34,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeMotorista">
+      <Stack.Navigator initialRouteName="LoginUser">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -75,6 +77,25 @@ const App = () => {
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
                 <Text style={styles.headerTitle}>Endereço de origem</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="MotoristaUser"
+          component={MotoristaUserScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Motoristas</Text>
               </View>
             ),
             headerStyle: styles.header,
@@ -312,7 +333,26 @@ const App = () => {
           options={{
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
-                <Text style={styles.headerTitle}>Gabriela</Text>
+                <Text style={styles.headerTitle}>Gabriela Sígolo</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="Motorista"
+          component={MotoristaScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Documentos</Text>
               </View>
             ),
             headerStyle: styles.header,
