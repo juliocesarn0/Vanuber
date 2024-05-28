@@ -11,6 +11,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+
 const LoginUser = () => {
   const navigation = useNavigation();
   const screenHeight = Dimensions.get("window").height;
@@ -20,15 +21,11 @@ const LoginUser = () => {
     navigation.navigate("CadastroUser"); // Navega para a tela de registro
   };
 
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.logoContainer}>
-          <Image
-            source={require("../../assets/logo.png")}
-            style={styles.logo}
-          />
+          <Image source={require("../assets/logo.png")} style={styles.logo} />
         </View>
 
         <View style={[styles.content, { minHeight: screenHeight }]}>
@@ -66,7 +63,7 @@ const LoginUser = () => {
               />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ValidacaoTelefone')}>
+            <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>ENTRAR</Text>
             </TouchableOpacity>
 

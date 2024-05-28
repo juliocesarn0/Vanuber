@@ -26,6 +26,7 @@ import ChatUserScreen from "./Screen/Usuario/ChatUser";
 import OfertaMotoristaScreen from "./Screen/Motorista/OfertaMotorista";
 import MotoristaScreen from "./Screen/Motorista/Motorista";
 import MotoristaUserScreen from "./Screen/Usuario/MotoristaUser";
+import ValidacaoTelefoneScreen from "./Screen/Usuario/ValidacaoTelefone";
 // Importação do Footer (se necessário)
 import Footer from "./components/FooterMotorista";
 
@@ -153,6 +154,25 @@ const App = () => {
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
                 <Text style={styles.headerTitle}>Gabriela</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="ValidacaoTelefone"
+          component={ValidacaoTelefoneScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>ENTRAR POR TELEFONE</Text>
               </View>
             ),
             headerStyle: styles.header,

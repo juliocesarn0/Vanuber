@@ -11,44 +11,40 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-const LoginUser = () => {
+
+const CadastroUser = () => {
   const navigation = useNavigation();
   const screenHeight = Dimensions.get("window").height;
 
-  // Função para lidar com o clique no botão de registro
   const handleRegisterPress = () => {
-    navigation.navigate("CadastroUser"); // Navega para a tela de registro
+    // Navega para a tela de registro (ou qualquer tela desejada)
+    navigation.navigate("CadastroUser");
   };
 
+  const handleLoginPress = () => {
+    // Navega de volta para a tela de login
+    navigation.goBack();
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.logoContainer}>
-          <Image
-            source={require("../../assets/logo.png")}
-            style={styles.logo}
-          />
+          <Image source={require("../assets/logo.png")} style={styles.logo} />
         </View>
 
         <View style={[styles.content, { minHeight: screenHeight }]}>
           <View style={styles.tabContainer}>
-            <TouchableOpacity style={styles.tab}>
+            <TouchableOpacity style={styles.tab} onPress={handleLoginPress}>
               <View style={styles.tabTextContainer}>
                 <Text style={styles.tabLogin}>Entrar</Text>
-                <View style={styles.tabUnderline} />
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.tab} onPress={handleRegisterPress}>
               <Text style={styles.tabRegister}>Cadastrar</Text>
+              <View style={styles.tabUnderline} />
             </TouchableOpacity>
-          </View>
-
-          <View style={styles.textInfoContainer}>
-            <Text style={styles.textInfo}>
-              Você pode usar seu número de telefone ou seu e-mail.
-            </Text>
           </View>
 
           <View style={styles.formContainer}>
@@ -66,12 +62,62 @@ const LoginUser = () => {
               />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ValidacaoTelefone')}>
-              <Text style={styles.buttonText}>ENTRAR</Text>
-            </TouchableOpacity>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input]}
+                placeholder="E-mail"
+                placeholderTextColor="#9DA1AB"
+              />
+            </View>
 
-            <TouchableOpacity style={styles.textLink}>
-              <Text style={styles.textLinkText}>Acessar usando seu e-mail</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input]}
+                placeholder="Primeiro Nome"
+                placeholderTextColor="#9DA1AB"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input]}
+                placeholder="Sobrenome"
+                placeholderTextColor="#9DA1AB"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input]}
+                placeholder="CPF"
+                placeholderTextColor="#9DA1AB"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input]}
+                placeholder="Senha"
+                placeholderTextColor="#9DA1AB"
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={[styles.input]}
+                placeholder="Confirmar Senha"
+                placeholderTextColor="#9DA1AB"
+              />
+            </View>
+
+            <View style={styles.textInfoContainer}>
+              <Text style={styles.textInfo}>
+                Ao se cadastrar você estará concordando com nossos Termos de Uso
+              </Text>
+            </View>
+
+            <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+              <Text style={styles.buttonText}>CADASTRAR</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -100,10 +146,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 250,
   },
-  appName: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
   tabContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -120,7 +162,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textTransform: "uppercase",
-    color: "#000",
+    color: "#9DA1AB",
   },
   tabUnderline: {
     height: 1,
@@ -134,11 +176,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     textTransform: "uppercase",
-    color: "#9DA1AB",
+    color: "#000",
   },
   textInfoContainer: {
     alignItems: "center",
-    marginTop: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
   textInfo: {
     color: "#9DA1AB",
@@ -153,12 +196,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
   },
+  inputContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    paddingTop: 2,
+  },
   input: {
     padding: 5,
     paddingRight: 10,
     marginVertical: 10,
     borderRadius: 5,
     flex: 1,
+    flex: 0.5,
+    borderBottomWidth: 2,
+    borderBottomColor: "#9DA1AB",
   },
   dddInput: {
     flex: 0.2,
@@ -166,13 +217,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
     textAlign: "center",
-    color: "red",
   },
   numeroInput: {
     flex: 0.8,
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
-    color: "blue",
   },
   button: {
     backgroundColor: "#FCFF74",
@@ -199,4 +248,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginUser;
+export default CadastroUser;
