@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -11,10 +11,27 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { TextInputMask } from "react-native-masked-text";
 
 const CadastroMotorista = () => {
   const navigation = useNavigation();
   const screenHeight = Dimensions.get("window").height;
+  const [ddd, setDdd] = useState("(  )");
+  const [numero, setNumero] = useState("");
+
+  const handleDddChange = (text) => {
+    const cleaned = text.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+    let formattedDdd = "(  )";
+
+    if (cleaned.length > 0) {
+      formattedDdd = `(${cleaned[0]} `;
+    }
+    if (cleaned.length > 1) {
+      formattedDdd = `(${cleaned[0]}${cleaned[1]})`;
+    }
+
+    setDdd(formattedDdd);
+  };
 
   const handleRegisterPress = () => {
     // Navega para a tela de registro (ou qualquer tela desejada)
@@ -56,12 +73,22 @@ const CadastroMotorista = () => {
                 style={[styles.input, styles.dddInput]}
                 placeholder="DDD"
                 placeholderTextColor="#9DA1AB"
+                value={ddd}
+                onChangeText={handleDddChange}
+                keyboardType="numeric"
+                maxLength={5} // Limita o comprimento para (99)
               />
-              <TextInput
+              <TextInputMask
+                type={"custom"}
+                options={{
+                  mask: "99999-9999",
+                }}
                 style={[styles.input, styles.numeroInput]}
-                placeholder="Numero de telefone"
-                secureTextEntry={true}
+                placeholder="Número de telefone"
                 placeholderTextColor="#9DA1AB"
+                value={numero}
+                onChangeText={setNumero}
+                keyboardType="numeric"
               />
             </View>
 
@@ -194,10 +221,10 @@ const styles = StyleSheet.create({
   },
   telefone: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
   },
   inputContainer: {
     paddingVertical: 10,
@@ -215,16 +242,21 @@ const styles = StyleSheet.create({
     borderBottomColor: "#9DA1AB",
   },
   dddInput: {
-    flex: 0.2,
-    marginRight: 10,
+    flex: 0.1, // Ajuste a proporção para diminuir a largura
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
     textAlign: "center",
+    color: "#000",
+    width: 20, // Ajuste a largura conforme necessário
+    marginLeft: 20, // Ajuste a margem conforme necessário
+    marginRight: 5,
   },
   numeroInput: {
     flex: 0.8,
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
+    color: "#000",
+    marginLeft: 10,
   },
   button: {
     backgroundColor: "#FCFF74",

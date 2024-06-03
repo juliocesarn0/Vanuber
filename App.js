@@ -27,6 +27,8 @@ import OfertaMotoristaScreen from "./Screen/Motorista/OfertaMotorista";
 import MotoristaScreen from "./Screen/Motorista/Motorista";
 import MotoristaUserScreen from "./Screen/Usuario/MotoristaUser";
 import ValidacaoTelefoneScreen from "./Screen/Usuario/ValidacaoTelefone";
+import ChatUserContatosScreen from "./Screen/Usuario/ChatUserContatos";
+import CadastroMotoristaScreen from "./Screen/Motorista/CadastroMotorista";
 // Importação do Footer (se necessário)
 import Footer from "./components/FooterMotorista";
 
@@ -35,7 +37,7 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoginUser">
+      <Stack.Navigator initialRouteName="LoginMotorista">
         <Stack.Screen
           name="LoginUser"
           component={LoginUserScreen}
@@ -116,6 +118,25 @@ const App = () => {
             headerTitle: () => (
               <View style={styles.headerTitleContainer}>
                 <Text style={styles.headerTitle}>Carteira</Text>
+              </View>
+            ),
+            headerStyle: styles.header,
+            headerTitleAlign: "center",
+            headerBackImage: () => (
+              <Image
+                source={require("./assets/setinha.png")}
+                style={{ width: 21, height: 21, left: 25 }}
+              />
+            ),
+          }}
+        />
+        <Stack.Screen
+          name="ChatUserContatos"
+          component={ChatUserContatosScreen}
+          options={{
+            headerTitle: () => (
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.headerTitle}>Chat</Text>
               </View>
             ),
             headerStyle: styles.header,
@@ -367,6 +388,11 @@ const App = () => {
           }}
         />
         <Stack.Screen
+          name="CadastroMotorista"
+          component={CadastroMotoristaScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Motorista"
           component={MotoristaScreen}
           options={{
@@ -385,7 +411,6 @@ const App = () => {
             ),
           }}
         />
-      
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -10,16 +10,67 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+import { TextInputMask } from "react-native-masked-text";
+import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+
 const LoginUser = () => {
   const navigation = useNavigation();
+  const [ddd, setDdd] = useState("(  )");
+  const [numero, setNumero] = useState("");
   const screenHeight = Dimensions.get("window").height;
 
-  // Função para lidar com o clique no botão de registro
-  const handleRegisterPress = () => {
-    navigation.navigate("CadastroUser"); // Navega para a tela de registro
+  const normalizePhoneNumber = (input) => {
+    return input.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
   };
 
+  const handleDddChange = (text) => {
+    const cleaned = text.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+    let formattedDdd = "(  )";
+
+    if (cleaned.length > 0) {
+      formattedDdd = `(${cleaned[0]} `;
+    }
+    if (cleaned.length > 1) {
+      formattedDdd = `(${cleaned[0]}${cleaned[1]})`;
+    }
+
+    setDdd(formattedDdd);
+  };
+
+  const handleLogin = async () => {
+    try {
+      const normalizedDdd = normalizePhoneNumber(ddd);
+      const normalizedNumero = normalizePhoneNumber(numero);
+
+      console.log("Verificando dados:", {
+        ddd: normalizedDdd,
+        numero: normalizedNumero,
+      });
+
+      const response = await axios.post(
+        "http://192.168.15.7:3000/api/users/check",
+        {
+          ddd: normalizedDdd,
+          numero: normalizedNumero,
+        }
+      );
+
+      if (response.status === 200) {
+        navigation.navigate("HomeUser");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.log("Usuário não encontrado");
+      } else {
+        console.error("Erro ao fazer login:", error);
+      }
+    }
+  };
+
+  const handleRegisterPress = () => {
+    navigation.navigate("CadastroUser");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -53,20 +104,30 @@ const LoginUser = () => {
 
           <View style={styles.formContainer}>
             <View style={styles.telefone}>
-              <TextInput
+            <TextInput
                 style={[styles.input, styles.dddInput]}
                 placeholder="DDD"
                 placeholderTextColor="#9DA1AB"
+                value={ddd}
+                onChangeText={handleDddChange}
+                keyboardType="numeric"
+                maxLength={5} // Limita o comprimento para (99)
               />
-              <TextInput
+              <TextInputMask
+                type={'custom'}
+                options={{
+                  mask: '99999-9999'
+                }}
                 style={[styles.input, styles.numeroInput]}
-                placeholder="Numero de telefone"
-                secureTextEntry={true}
+                placeholder="Número de telefone"
                 placeholderTextColor="#9DA1AB"
+                value={numero}
+                onChangeText={setNumero}
+                keyboardType="numeric"
               />
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ValidacaoTelefone')}>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
               <Text style={styles.buttonText}>ENTRAR</Text>
             </TouchableOpacity>
 
@@ -148,10 +209,10 @@ const styles = StyleSheet.create({
   },
   telefone: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     alignItems: "center",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
   },
   input: {
     padding: 5,
@@ -161,18 +222,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dddInput: {
-    flex: 0.2,
-    marginRight: 10,
+    flex: 0.1,
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
     textAlign: "center",
-    color: "red",
+    color: "#000",
+    width: 50,
+    marginLeft: 20,
+    marginRight: 5,
   },
   numeroInput: {
     flex: 0.8,
     borderBottomWidth: 2,
     borderBottomColor: "#9DA1AB",
-    color: "blue",
+    color: "#000",
   },
   button: {
     backgroundColor: "#FCFF74",

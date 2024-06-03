@@ -1,5 +1,14 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TextInputMask } from "react-native-masked-text";
 
@@ -10,11 +19,42 @@ const EnderecoUser = () => {
   const [numero, setNumero] = useState("");
   const [bairro, setBairro] = useState("");
   const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
+
+  useEffect(() => {
+    const buscarEndereco = async () => {
+      const cleanedCep = cep.replace("-", "");
+      console.log(`Verificando CEP: ${cleanedCep}`);
+      if (cleanedCep.length === 8) {
+        // Verifica se o CEP tem 8 dígitos
+        console.log(`Buscando endereço para o CEP: ${cleanedCep}`);
+        try {
+          const response = await fetch(
+            `http://192.168.15.7:3000/api/cep/${cleanedCep}`
+          );
+          if (!response.ok) {
+            throw new Error("Erro ao buscar o CEP");
+          }
+
+          const data = await response.json();
+          console.log("Dados recebidos:", data);
+          setRua(data.rua);
+          setBairro(data.bairro);
+          setCidade(data.cidade);
+          setEstado(data.estado);
+        } catch (error) {
+          console.error("Erro ao buscar o endereço:", error);
+          Alert.alert("Erro", "Não foi possível buscar o endereço");
+        }
+      } else {
+        console.log("CEP inválido ou incompleto:", cleanedCep);
+      }
+    };
+
+    buscarEndereco();
+  }, [cep]);
 
   const handleContinuar = () => {
-    // Aqui você pode implementar a lógica para validar ou enviar o endereço para outra tela
-    // Por exemplo, você pode navegar para a tela "ListaMotorista.js" passando os dados do endereço como parâmetros
-
     // Navegar para a tela "ListaMotorista.js" após continuar
     navigation.navigate("ListaMotorista", { cep, rua, numero, bairro, cidade });
   };
@@ -28,13 +68,16 @@ const EnderecoUser = () => {
         <Text style={styles.label}>CEP:</Text>
         <TextInputMask
           style={styles.input}
-          type={'custom'}
+          type={"custom"}
           options={{
-            mask: '99999-999'
+            mask: "99999-999",
           }}
           value={cep}
           onChangeText={(formatted, extracted) => {
-            setCep(extracted);
+            console.log(
+              `CEP digitado: ${formatted}, CEP extraído: ${extracted}`
+            );
+            setCep(formatted); // Usar o valor formatado diretamente
           }}
           keyboardType="numeric"
         />
@@ -46,7 +89,7 @@ const EnderecoUser = () => {
         />
         <View style={styles.numeroBairroContainer}>
           <View style={[styles.inputContainer, { flex: 2 }]}>
-            <Text style={styles.label}>Número:</Text>
+            <Text style={styles.label}>Bairro:</Text>
             <TextInput
               style={styles.input}
               value={numero}
@@ -55,7 +98,7 @@ const EnderecoUser = () => {
             />
           </View>
           <View style={[styles.inputContainer, { flex: 1, marginLeft: 10 }]}>
-            <Text style={styles.label}>Bairro:</Text>
+            <Text style={styles.label}>Número:</Text>
             <TextInput
               style={styles.input}
               value={bairro}
@@ -69,6 +112,14 @@ const EnderecoUser = () => {
             style={styles.input}
             value={cidade}
             onChangeText={(text) => setCidade(text)}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Estado:</Text>
+          <TextInput
+            style={styles.input}
+            value={estado}
+            editable={false} // Estado não editável
           />
         </View>
       </View>

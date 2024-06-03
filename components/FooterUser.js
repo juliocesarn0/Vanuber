@@ -52,7 +52,7 @@ const FooterUser = () => {
           <Text style={styles.footerText}>Motorista</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => handleNavigation("Chat")}
+          onPress={() => handleNavigation("ChatUserContatos")}
           style={styles.footerItem}
         >
           <Image
