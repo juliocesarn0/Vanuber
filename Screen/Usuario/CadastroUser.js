@@ -17,7 +17,6 @@ import axios from "axios";
 const CadastroUser = () => {
   const navigation = useNavigation();
   const screenHeight = Dimensions.get("window").height;
-  
 
   const [ddd, setDdd] = useState("(  )");
   const [numero, setNumero] = useState("");
@@ -27,7 +26,6 @@ const CadastroUser = () => {
   const [cpf, setCpf] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-
 
   const handleDddChange = (text) => {
     const cleaned = text.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
@@ -50,12 +48,12 @@ const CadastroUser = () => {
     }
 
     const newUser = {
-      ddd,
-      numero,
+      ddd: ddd.replace(/\D/g, ""), // Normalize DDD
+      numero: numero.replace(/\D/g, ""), // Normalize número
       email,
       primeiroNome,
       sobrenome,
-      cpf,
+      cpf: cpf.replace(/\D/g, ""), // Normalize CPF
       senha,
     };
 
@@ -69,7 +67,10 @@ const CadastroUser = () => {
         navigation.navigate("LoginUser");
       }
     } catch (error) {
-      console.error("Erro ao cadastrar usuário:", error);
+      console.error(
+        "Erro ao cadastrar usuário:",
+        error.response ? error.response.data : error.message
+      );
       alert("Erro ao cadastrar usuário");
     }
   };
@@ -110,9 +111,9 @@ const CadastroUser = () => {
                 maxLength={5} // Limita o comprimento para (99)
               />
               <TextInputMask
-                type={'custom'}
+                type={"custom"}
                 options={{
-                  mask: '99999-9999'
+                  mask: "99999-9999",
                 }}
                 style={[styles.input, styles.numeroInput]}
                 placeholder="Número de telefone"
@@ -160,6 +161,8 @@ const CadastroUser = () => {
                 placeholderTextColor="#9DA1AB"
                 value={cpf}
                 onChangeText={setCpf}
+                keyboardType="numeric"
+                maxLength={11} // Limita o comprimento para 11 dígitos
               />
             </View>
 

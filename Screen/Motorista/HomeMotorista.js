@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import Footer from "../../components/FooterMotorista";
+import MotoristaContext from "../../context/MotoristaContext"; // Importar o contexto
 
 const HomeMotorista = () => {
   let [fontsLoaded] = useFonts({
@@ -10,6 +11,7 @@ const HomeMotorista = () => {
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
+  const { motorista } = useContext(MotoristaContext); // Usar o contexto
   const navigation = useNavigation();
 
   const handleContinue = () => {
@@ -29,15 +31,18 @@ const HomeMotorista = () => {
             source={require("../../assets/ricardo.png")}
             style={styles.avatar}
           />
-          <Text style={styles.greetingText}>Olá, Motorista!</Text>
+          <Text style={styles.greetingText}>
+            Olá, {motorista?.primeiroNome || "Motorista"}!
+          </Text>
         </View>
-        {/* Aqui você pode adicionar outros elementos de cabeçalho, se necessário */}
       </View>
 
       <View style={styles.bottomContainer}>
         <View style={styles.bottomContent}>
           <Text style={[styles.bottomText, { textAlign: "center" }]}>
-            Atualizar vans e documentos
+            {motorista?.status === "em_analise"
+              ? "Em análise"
+              : "Atualizar vans e documentos"}
           </Text>
           <Image
             resizeMode="contain"
@@ -45,12 +50,14 @@ const HomeMotorista = () => {
             style={styles.bottomImage}
           />
         </View>
-        <TouchableOpacity
-          style={styles.continueButton}
-          onPress={handleContinue}
-        >
-          <Text style={styles.continueButtonText}>Cadastrar documentos</Text>
-        </TouchableOpacity>
+        {motorista?.status !== "em_analise" && (
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={handleContinue}
+          >
+            <Text style={styles.continueButtonText}>Cadastrar documentos</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <Footer navigation={navigation} />
     </View>
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
   bottomImage: {
     width: 20,
     height: 20,
-    marginLeft: "auto", // Move para o canto direito
+    marginLeft: "auto",
   },
   continueButton: {
     backgroundColor: "#f2f2f2",

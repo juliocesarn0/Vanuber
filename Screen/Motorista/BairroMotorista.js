@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -12,9 +12,12 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+import MotoristaContext from "../../context/MotoristaContext";
 
 const BairroMotorista = () => {
   const navigation = useNavigation();
+  const { motorista } = useContext(MotoristaContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [cidade, setCidade] = useState("");
   const [cidades, setCidades] = useState([]);
@@ -110,7 +113,35 @@ const BairroMotorista = () => {
     setModalVisible(false);
   };
 
-  const handleContinuar = () => {
+  const handleContinuar = async () => {
+    try {
+      if (!motorista || !motorista._id) {
+        console.error(
+          "Motorista não encontrado ou ID do motorista está faltando"
+        );
+        return;
+      }
+
+      const motoristaId = motorista._id;
+      const bairrosData = selectedBairros;
+
+      console.log("Dados dos bairros enviados para atualização:", bairrosData);
+
+      const response = await axios.put(
+        `http://192.168.15.7:3000/api/motoristas/${motoristaId}/bairros`,
+        { bairros: bairrosData }
+      );
+
+      if (response.status === 200) {
+        console.log(
+          "Dados dos bairros do motorista atualizados com sucesso:",
+          response.data
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar bairros do motorista:", error);
+    }
+
     navigation.navigate("ConfirmacaoMotorista");
   };
 

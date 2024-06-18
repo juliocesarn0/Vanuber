@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -10,14 +10,49 @@ import {
   FlatList,
   ActivityIndicator,
   Alert,
+  Picker,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Picker } from "@react-native-picker/picker";
+import axios from "axios";
+import MotoristaContext from "../../context/MotoristaContext";
+
+const estados = [
+  { sigla: "AC", nome: "Acre" },
+  { sigla: "AL", nome: "Alagoas" },
+  { sigla: "AP", nome: "Amapá" },
+  { sigla: "AM", nome: "Amazonas" },
+  { sigla: "BA", nome: "Bahia" },
+  { sigla: "CE", nome: "Ceará" },
+  { sigla: "DF", nome: "Distrito Federal" },
+  { sigla: "ES", nome: "Espírito Santo" },
+  { sigla: "GO", nome: "Goiás" },
+  { sigla: "MA", nome: "Maranhão" },
+  { sigla: "MT", nome: "Mato Grosso" },
+  { sigla: "MS", nome: "Mato Grosso do Sul" },
+  { sigla: "MG", nome: "Minas Gerais" },
+  { sigla: "PA", nome: "Pará" },
+  { sigla: "PB", nome: "Paraíba" },
+  { sigla: "PR", nome: "Paraná" },
+  { sigla: "PE", nome: "Pernambuco" },
+  { sigla: "PI", nome: "Piauí" },
+  { sigla: "RJ", nome: "Rio de Janeiro" },
+  { sigla: "RN", nome: "Rio Grande do Norte" },
+  { sigla: "RS", nome: "Rio Grande do Sul" },
+  { sigla: "RO", nome: "Rondônia" },
+  { sigla: "RR", nome: "Roraima" },
+  { sigla: "SC", nome: "Santa Catarina" },
+  { sigla: "SP", nome: "São Paulo" },
+  { sigla: "SE", nome: "Sergipe" },
+  { sigla: "TO", nome: "Tocantins" },
+];
 
 const DestinoMotorista = ({ route }) => {
   const navigation = useNavigation();
-  const { cnh, renavam, modelo, ano, cor } = route.params;
+  const { motorista } = useContext(MotoristaContext);
+  const { cnh, renavam, modelo, ano, cor } = route.params || {};
+
   const [modalVisible, setModalVisible] = useState(false);
+  const [estado, setEstado] = useState("SP");
   const [cidade, setCidade] = useState("");
   const [cidades, setCidades] = useState([]);
   const [carregandoCidades, setCarregandoCidades] = useState(false);
@@ -57,7 +92,7 @@ const DestinoMotorista = ({ route }) => {
     setCarregandoCidades(true);
     try {
       const response = await fetch(
-        `http://192.168.15.7:3000/api/cidades/SP?q=${cidade}`
+        `http://192.168.15.7:3000/api/cidades/${estado}?q=${cidade}`
       );
       const data = await response.json();
       setCidades(data);
@@ -72,7 +107,7 @@ const DestinoMotorista = ({ route }) => {
     setCarregandoEscolasUniversidades(true);
     try {
       const response = await fetch(
-        `http://192.168.15.7:3000/api/escolas-universidades?estado=SP&cidade=${cidade}&q=${local}`
+        `http://192.168.15.7:3000/api/escolas-universidades?estado=${estado}&cidade=${cidade}&q=${local}`
       );
       if (!response.ok) {
         throw new Error(
@@ -105,7 +140,7 @@ const DestinoMotorista = ({ route }) => {
   const handleAcrescentar = () => {
     setSelectedLocais((prevLocais) => [
       ...prevLocais,
-      { cidade, local, periodo },
+      { estado, cidade, local, periodo },
     ]);
     setModalVisible(false);
   };
@@ -121,7 +156,26 @@ const DestinoMotorista = ({ route }) => {
     setModalVisible(false);
   };
 
-  const handleContinuar = () => {
+  const handleContinuar = async () => {
+    try {
+      const motoristaId = motorista._id;
+      const destinos = selectedLocais;
+
+      const response = await axios.put(
+        `http://192.168.15.7:3000/api/motoristas/${motoristaId}/destinos`,
+        { destinos }
+      );
+
+      if (response.status === 200) {
+        console.log(
+          "Dados do motorista atualizados com sucesso:",
+          response.data
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar destinos do motorista:", error);
+    }
+
     navigation.navigate("BairroMotorista");
   };
 
@@ -143,7 +197,7 @@ const DestinoMotorista = ({ route }) => {
         renderItem={({ item }) => (
           <View style={styles.selectedLocalItem}>
             <Text style={styles.selectedLocalText}>
-              {item.cidade} - {item.local} ({item.periodo})
+              {item.estado} - {item.cidade} - {item.local} ({item.periodo})
             </Text>
           </View>
         )}
@@ -165,7 +219,22 @@ const DestinoMotorista = ({ route }) => {
               <Text>X</Text>
             </TouchableOpacity>
             <View style={styles.containerForm}>
-              <Text style={styles.cidade}>Cidade:</Text>
+              <Text style={styles.label}>Estado:</Text>
+              <Picker
+                style={styles.input}
+                selectedValue={estado}
+                onValueChange={(itemValue) => setEstado(itemValue)}
+              >
+                {estados.map((estado) => (
+                  <Picker.Item
+                    key={estado.sigla}
+                    label={estado.nome}
+                    value={estado.sigla}
+                  />
+                ))}
+              </Picker>
+
+              <Text style={styles.label}>Cidade:</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => setCidade(text)}
@@ -188,7 +257,7 @@ const DestinoMotorista = ({ route }) => {
                 />
               )}
 
-              <Text style={styles.bairro}>Local (Escola/Universidade):</Text>
+              <Text style={styles.label}>Local (Escola/Universidade):</Text>
               <TextInput
                 style={styles.input}
                 onChangeText={(text) => setLocal(text)}
@@ -211,10 +280,10 @@ const DestinoMotorista = ({ route }) => {
                 />
               )}
 
-              <Text style={styles.periodo}>Período:</Text>
+              <Text style={styles.label}>Período:</Text>
               <Picker
                 selectedValue={periodo}
-                style={styles.picker}
+                style={styles.input}
                 onValueChange={(itemValue) => setPeriodo(itemValue)}
               >
                 <Picker.Item label="Manhã" value="manhã" />

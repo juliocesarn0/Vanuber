@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -13,19 +13,21 @@ import {
 import { TextInputMask } from "react-native-masked-text";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import UserContext from "../../context/UserContext"; // Verifique se o caminho está correto
 
 const LoginUser = () => {
   const navigation = useNavigation();
+  const { login } = useContext(UserContext); // Utilize o contexto do usuário
   const [ddd, setDdd] = useState("(  )");
   const [numero, setNumero] = useState("");
   const screenHeight = Dimensions.get("window").height;
 
   const normalizePhoneNumber = (input) => {
-    return input.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+    return input.replace(/\D/g, "");
   };
 
   const handleDddChange = (text) => {
-    const cleaned = text.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
+    const cleaned = text.replace(/\D/g, "");
     let formattedDdd = "(  )";
 
     if (cleaned.length > 0) {
@@ -39,33 +41,17 @@ const LoginUser = () => {
   };
 
   const handleLogin = async () => {
-    try {
-      const normalizedDdd = normalizePhoneNumber(ddd);
-      const normalizedNumero = normalizePhoneNumber(numero);
+    const normalizedDdd = normalizePhoneNumber(ddd);
+    const normalizedNumero = normalizePhoneNumber(numero);
 
-      console.log("Verificando dados:", {
-        ddd: normalizedDdd,
-        numero: normalizedNumero,
-      });
+    console.log("Verificando dados:", {
+      ddd: normalizedDdd,
+      numero: normalizedNumero,
+    });
 
-      const response = await axios.post(
-        "http://192.168.15.7:3000/api/users/check",
-        {
-          ddd: normalizedDdd,
-          numero: normalizedNumero,
-        }
-      );
+    await login(normalizedDdd, normalizedNumero);
 
-      if (response.status === 200) {
-        navigation.navigate("HomeUser");
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 404) {
-        console.log("Usuário não encontrado");
-      } else {
-        console.error("Erro ao fazer login:", error);
-      }
-    }
+    navigation.navigate("HomeUser");
   };
 
   const handleRegisterPress = () => {
@@ -104,19 +90,19 @@ const LoginUser = () => {
 
           <View style={styles.formContainer}>
             <View style={styles.telefone}>
-            <TextInput
+              <TextInput
                 style={[styles.input, styles.dddInput]}
                 placeholder="DDD"
                 placeholderTextColor="#9DA1AB"
                 value={ddd}
                 onChangeText={handleDddChange}
                 keyboardType="numeric"
-                maxLength={5} // Limita o comprimento para (99)
+                maxLength={5}
               />
               <TextInputMask
-                type={'custom'}
+                type={"custom"}
                 options={{
-                  mask: '99999-9999'
+                  mask: "99999-9999",
                 }}
                 style={[styles.input, styles.numeroInput]}
                 placeholder="Número de telefone"

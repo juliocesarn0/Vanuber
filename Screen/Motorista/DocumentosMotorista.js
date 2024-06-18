@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,10 +9,11 @@ import {
   Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { TextInputMask } from "react-native-masked-text";
+import MotoristaContext from "../../context/MotoristaContext";
 
 const DocumentosMotorista = () => {
   const navigation = useNavigation();
+  const { updateMotorista } = useContext(MotoristaContext);
   const [cnh, setCnh] = useState("");
   const [renavam, setRenavam] = useState("");
   const [modelo, setModelo] = useState("");
@@ -20,17 +21,14 @@ const DocumentosMotorista = () => {
   const [cor, setCor] = useState("");
 
   const handleContinuar = () => {
-    // Implemente aqui a lógica para validação ou envio dos documentos para outra tela
-    // Por exemplo, você pode navegar para a tela "DestinosMotorista.js" passando os dados como parâmetros
+    console.log("CNH:", cnh);
+    console.log("Renavam:", renavam);
+    console.log("Modelo:", modelo);
+    console.log("Ano:", ano);
+    console.log("Cor:", cor);
 
-    // Navegar para a próxima tela após continuar
-    navigation.navigate("DestinosMotorista", {
-      cnh,
-      renavam,
-      modelo,
-      ano,
-      cor,
-    });
+    updateMotorista({ cnh, renavam, modelo, ano, cor });
+    navigation.navigate("DestinosMotorista");
   };
 
   return (
@@ -40,30 +38,18 @@ const DocumentosMotorista = () => {
     >
       <View style={styles.formContainer}>
         <Text style={styles.label}>CNH:</Text>
-        <TextInputMask
+        <TextInput
           style={styles.input}
-          type={"custom"}
-          options={{
-            mask: "99999999999",
-          }}
           value={cnh}
-          onChangeText={(formatted, extracted) => {
-            setCnh(extracted);
-          }}
+          onChangeText={setCnh}
           keyboardType="numeric"
         />
 
         <Text style={styles.label}>Renavam:</Text>
-        <TextInputMask
+        <TextInput
           style={styles.input}
-          type={"custom"}
-          options={{
-            mask: "99999999999",
-          }}
           value={renavam}
-          onChangeText={(formatted, extracted) => {
-            setRenavam(extracted);
-          }}
+          onChangeText={setRenavam}
           keyboardType="numeric"
         />
 
@@ -77,16 +63,10 @@ const DocumentosMotorista = () => {
         <View style={styles.row}>
           <View style={styles.columnAno}>
             <Text style={styles.label}>Ano:</Text>
-            <TextInputMask
+            <TextInput
               style={styles.input}
-              type={"custom"}
-              options={{
-                mask: "9999",
-              }}
               value={ano}
-              onChangeText={(formatted, extracted) => {
-                setAno(extracted);
-              }}
+              onChangeText={setAno}
               keyboardType="numeric"
             />
           </View>

@@ -1,31 +1,35 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Footer from "../../components/FooterMotorista";
+import MotoristaContext from "../../context/MotoristaContext"; // Importar o contexto
 
 const ConfirmacaoMotorista = () => {
   const navigation = useNavigation();
+  const { updateMotorista, motorista } = useContext(MotoristaContext); // Usar o contexto
 
-  const handleVoltarInicio = () => {
+  const handleVoltarInicio = async () => {
+    if (motorista && motorista._id) {
+      await updateMotorista({ status: "em_analise" }); // Atualizar o status para "em análise"
+    }
     navigation.navigate("HomeMotorista");
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-      <Image
-        source={require("../../assets/caixaEmail.png")}
-        style={styles.image}
-      />
-      <View style={styles.messageContainer}>
-        <Text style={styles.message}>
-          Obrigado por fornecer os dados, estamos verificando seus dados e logo
-          enviaremos um e-mail de confirmação.
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleVoltarInicio}>
-        <Text style={styles.buttonText}>Voltar para o Início</Text>
-      </TouchableOpacity>
+        <Image
+          source={require("../../assets/caixaEmail.png")}
+          style={styles.image}
+        />
+        <View style={styles.messageContainer}>
+          <Text style={styles.message}>
+            Obrigado por fornecer os dados, estamos verificando seus dados e
+            logo enviaremos um e-mail de confirmação.
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleVoltarInicio}>
+          <Text style={styles.buttonText}>Voltar para o Início</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -33,9 +37,9 @@ const ConfirmacaoMotorista = () => {
 
 const styles = StyleSheet.create({
   content: {
-    flex: 1, // Garantir que o conteúdo ocupe o espaço disponível
-    alignItems: 'center',
-    paddingBottom: 100, // Adiciona um preenchimento inferior para que o conteúdo não fique atrás do footer
+    flex: 1,
+    alignItems: "center",
+    paddingBottom: 100,
   },
   container: {
     flex: 1,

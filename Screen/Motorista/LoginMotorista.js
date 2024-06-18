@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -12,32 +12,71 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TextInputMask } from "react-native-masked-text";
+import axios from "axios";
+import MotoristaContext from "../../context/MotoristaContext";
 
 const LoginMotorista = () => {
-    const navigation = useNavigation();
-    const screenHeight = Dimensions.get("window").height;
-    const [ddd, setDdd] = useState("(  )");
-    const [numero, setNumero] = useState("");
+  const navigation = useNavigation();
+  const screenHeight = Dimensions.get("window").height;
+  const [ddd, setDdd] = useState("(  )");
+  const [numero, setNumero] = useState("");
+  const { login } = useContext(MotoristaContext);
 
-    const handleDddChange = (text) => {
-      const cleaned = text.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
-      let formattedDdd = "(  )";
-  
-      if (cleaned.length > 0) {
-        formattedDdd = `(${cleaned[0]} `;
-      }
-      if (cleaned.length > 1) {
-        formattedDdd = `(${cleaned[0]}${cleaned[1]})`;
-      }
-  
-      setDdd(formattedDdd);
-    };
-    // Função para lidar com o clique no botão de registro
-    const handleRegisterPress = () => {
-        navigation.navigate("CadastroMotorista"); // Navega para a tela de registro
-      };
+  const normalizePhoneNumber = (input) => {
+    return input.replace(/\D/g, "");
+  };
 
-    return(
+  const handleDddChange = (text) => {
+    const cleaned = text.replace(/\D/g, "");
+    let formattedDdd = "(  )";
+
+    if (cleaned.length > 0) {
+      formattedDdd = `(${cleaned[0]} `;
+    }
+    if (cleaned.length > 1) {
+      formattedDdd = `(${cleaned[0]}${cleaned[1]})`;
+    }
+
+    setDdd(formattedDdd);
+  };
+
+  const handleLogin = async () => {
+    try {
+      const normalizedDdd = normalizePhoneNumber(ddd);
+      const normalizedNumero = normalizePhoneNumber(numero);
+
+      console.log("Verificando dados:", {
+        ddd: normalizedDdd,
+        numero: normalizedNumero,
+      });
+
+      const response = await axios.post(
+        "http://192.168.15.7:3000/api/motoristas/login",
+        {
+          ddd: normalizedDdd,
+          numero: normalizedNumero,
+        }
+      );
+
+      if (response.status === 200) {
+        login(response.data);
+        console.log("Dados do motorista após login:", response.data); // Adicione este log
+        navigation.navigate("HomeMotorista");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.log("Motorista não encontrado");
+      } else {
+        console.error("Erro ao fazer login:", error);
+      }
+    }
+  };
+
+  const handleRegisterPress = () => {
+    navigation.navigate("CadastroMotorista");
+  };
+
+  return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.logoContainer}>
@@ -69,19 +108,19 @@ const LoginMotorista = () => {
 
           <View style={styles.formContainer}>
             <View style={styles.telefone}>
-            <TextInput
+              <TextInput
                 style={[styles.input, styles.dddInput]}
                 placeholder="DDD"
                 placeholderTextColor="#9DA1AB"
                 value={ddd}
                 onChangeText={handleDddChange}
                 keyboardType="numeric"
-                maxLength={5} // Limita o comprimento para (99)
+                maxLength={5}
               />
               <TextInputMask
-                type={'custom'}
+                type={"custom"}
                 options={{
-                  mask: '99999-9999'
+                  mask: "99999-9999",
                 }}
                 style={[styles.input, styles.numeroInput]}
                 placeholder="Número de telefone"
@@ -92,7 +131,7 @@ const LoginMotorista = () => {
               />
             </View>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
               <Text style={styles.buttonText}>ENTRAR</Text>
             </TouchableOpacity>
 
@@ -106,126 +145,125 @@ const LoginMotorista = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#FCFF74",
-    },
-    content: {
-      backgroundColor: "#fff",
-      paddingHorizontal: 20,
-      paddingBottom: 20,
-      borderRadius: 30,
-    },
-    logoContainer: {
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: 20,
-    },
-    logo: {
-      width: 200,
-      height: 250,
-    },
-    appName: {
-      fontSize: 24,
-      fontWeight: "bold",
-    },
-    tabContainer: {
-      flexDirection: "row",
-      justifyContent: "space-around",
-      marginTop: 20,
-    },
-    tab: {
-      paddingTop: 24,
-    },
-    tabTextContainer: {
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    tabLogin: {
-      fontSize: 16,
-      fontWeight: "bold",
-      textTransform: "uppercase",
-      color: "#000",
-    },
-    tabUnderline: {
-      height: 1,
-      backgroundColor: "#FCFF74",
-      position: "absolute",
-      bottom: 0,
-      left: "30%",
-      width: "70%",
-    },
-    tabRegister: {
-      fontSize: 16,
-      fontWeight: "bold",
-      textTransform: "uppercase",
-      color: "#9DA1AB",
-    },
-    textInfoContainer: {
-      alignItems: "center",
-      marginTop: 30,
-    },
-    textInfo: {
-      color: "#9DA1AB",
-    },
-    formContainer: {
-      marginTop: 0,
-    },
-    telefone: {
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      alignItems: "center",
-      paddingVertical: 10,
-      paddingHorizontal: 0,
-    },
-    input: {
-      padding: 5,
-      paddingRight: 10,
-      marginVertical: 10,
-      borderRadius: 5,
-      flex: 1,
-    },
-    dddInput: {
-      flex: 0.1,
-      borderBottomWidth: 2,
-      borderBottomColor: "#9DA1AB",
-      textAlign: "center",
-      color: "#000",
-      width: 50,
-      marginLeft: 20,
-      marginRight: 5,
-    },
-    numeroInput: {
-      flex: 0.8,
-      borderBottomWidth: 2,
-      borderBottomColor: "#9DA1AB",
-      color: "#000",
-    },
-    button: {
-      backgroundColor: "#FCFF74",
-      paddingVertical: 14,
-      paddingHorizontal: 16,
-      borderRadius: 24,
-      marginTop: 20,
-      justifyContent: "center",
-      alignItems: "center",
-      alignSelf: "center",
-      width: 150,
-    },
-    buttonText: {
-      color: "#000",
-      fontSize: 16,
-    },
-    textLink: {
-      marginTop: 30,
-      alignItems: "center",
-    },
-    textLinkText: {
-      color: "#000",
-      textDecorationLine: "underline",
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: "#FCFF74",
+  },
+  content: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    borderRadius: 30,
+  },
+  logoContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  logo: {
+    width: 200,
+    height: 250,
+  },
+  appName: {
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  tabContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
+  },
+  tab: {
+    paddingTop: 24,
+  },
+  tabTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  tabLogin: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    color: "#000",
+  },
+  tabUnderline: {
+    height: 1,
+    backgroundColor: "#FCFF74",
+    position: "absolute",
+    bottom: 0,
+    left: "30%",
+    width: "70%",
+  },
+  tabRegister: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    color: "#9DA1AB",
+  },
+  textInfoContainer: {
+    alignItems: "center",
+    marginTop: 30,
+  },
+  textInfo: {
+    color: "#9DA1AB",
+  },
+  formContainer: {
+    marginTop: 0,
+  },
+  telefone: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingVertical: 10,
+    paddingHorizontal: 0,
+  },
+  input: {
+    padding: 5,
+    paddingRight: 10,
+    marginVertical: 10,
+    borderRadius: 5,
+    flex: 1,
+  },
+  dddInput: {
+    flex: 0.1,
+    borderBottomWidth: 2,
+    borderBottomColor: "#9DA1AB",
+    textAlign: "center",
+    color: "#000",
+    width: 50,
+    marginLeft: 20,
+    marginRight: 5,
+  },
+  numeroInput: {
+    flex: 0.8,
+    borderBottomWidth: 2,
+    borderBottomColor: "#9DA1AB",
+    color: "#000",
+  },
+  button: {
+    backgroundColor: "#FCFF74",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 24,
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    width: 150,
+  },
+  buttonText: {
+    color: "#000",
+    fontSize: 16,
+  },
+  textLink: {
+    marginTop: 30,
+    alignItems: "center",
+  },
+  textLinkText: {
+    color: "#000",
+    textDecorationLine: "underline",
+  },
+});
 
-  export default LoginMotorista;
+export default LoginMotorista;

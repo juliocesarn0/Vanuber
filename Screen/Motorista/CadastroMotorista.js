@@ -9,15 +9,23 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TextInputMask } from "react-native-masked-text";
+import axios from "axios";
 
 const CadastroMotorista = () => {
   const navigation = useNavigation();
   const screenHeight = Dimensions.get("window").height;
   const [ddd, setDdd] = useState("(  )");
   const [numero, setNumero] = useState("");
+  const [email, setEmail] = useState("");
+  const [primeiroNome, setPrimeiroNome] = useState("");
+  const [sobrenome, setSobrenome] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
 
   const handleDddChange = (text) => {
     const cleaned = text.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
@@ -33,13 +41,43 @@ const CadastroMotorista = () => {
     setDdd(formattedDdd);
   };
 
-  const handleRegisterPress = () => {
-    // Navega para a tela de registro (ou qualquer tela desejada)
-    navigation.navigate("CadastroMotorista");
+  const handleRegisterPress = async () => {
+    if (senha !== confirmarSenha) {
+      Alert.alert("Erro", "As senhas não coincidem");
+      return;
+    }
+
+    const normalizedDdd = ddd.replace(/\D/g, "");
+    const normalizedNumero = numero.replace(/\D/g, "");
+
+    try {
+      const response = await axios.post(
+        "http://192.168.15.7:3000/api/motoristas",
+        {
+          ddd: normalizedDdd,
+          numero: normalizedNumero,
+          email,
+          primeiroNome,
+          sobrenome,
+          cpf,
+          senha,
+        }
+      );
+
+      if (response.status === 201) {
+        Alert.alert("Sucesso", "Cadastro realizado com sucesso!");
+        navigation.navigate("LoginMotorista");
+      }
+    } catch (error) {
+      console.error("Erro ao cadastrar motorista:", error);
+      Alert.alert(
+        "Erro",
+        "Não foi possível realizar o cadastro. Tente novamente."
+      );
+    }
   };
 
   const handleLoginPress = () => {
-    // Navega de volta para a tela de login
     navigation.goBack();
   };
 
@@ -76,7 +114,7 @@ const CadastroMotorista = () => {
                 value={ddd}
                 onChangeText={handleDddChange}
                 keyboardType="numeric"
-                maxLength={5} // Limita o comprimento para (99)
+                maxLength={5}
               />
               <TextInputMask
                 type={"custom"}
@@ -97,6 +135,8 @@ const CadastroMotorista = () => {
                 style={[styles.input]}
                 placeholder="E-mail"
                 placeholderTextColor="#9DA1AB"
+                value={email}
+                onChangeText={setEmail}
               />
             </View>
 
@@ -105,6 +145,8 @@ const CadastroMotorista = () => {
                 style={[styles.input]}
                 placeholder="Primeiro Nome"
                 placeholderTextColor="#9DA1AB"
+                value={primeiroNome}
+                onChangeText={setPrimeiroNome}
               />
             </View>
 
@@ -113,6 +155,8 @@ const CadastroMotorista = () => {
                 style={[styles.input]}
                 placeholder="Sobrenome"
                 placeholderTextColor="#9DA1AB"
+                value={sobrenome}
+                onChangeText={setSobrenome}
               />
             </View>
 
@@ -121,6 +165,8 @@ const CadastroMotorista = () => {
                 style={[styles.input]}
                 placeholder="CPF"
                 placeholderTextColor="#9DA1AB"
+                value={cpf}
+                onChangeText={setCpf}
               />
             </View>
 
@@ -129,6 +175,9 @@ const CadastroMotorista = () => {
                 style={[styles.input]}
                 placeholder="Senha"
                 placeholderTextColor="#9DA1AB"
+                value={senha}
+                onChangeText={setSenha}
+                secureTextEntry
               />
             </View>
 
@@ -137,6 +186,9 @@ const CadastroMotorista = () => {
                 style={[styles.input]}
                 placeholder="Confirmar Senha"
                 placeholderTextColor="#9DA1AB"
+                value={confirmarSenha}
+                onChangeText={setConfirmarSenha}
+                secureTextEntry
               />
             </View>
 
@@ -146,7 +198,10 @@ const CadastroMotorista = () => {
               </Text>
             </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleRegisterPress}
+            >
               <Text style={styles.buttonText}>CADASTRAR</Text>
             </TouchableOpacity>
           </View>

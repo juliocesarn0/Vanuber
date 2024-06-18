@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -31,6 +31,14 @@ export default function WelcomeScreen({ navigation }) {
   if (!fontsLoaded) {
     return null; // Ou uma tela de carregamento
   }
+
+  const handleContinue = () => {
+    if (userType === "usuario") {
+      navigation.navigate("LoginUser");
+    } else if (userType === "motorista") {
+      navigation.navigate("LoginMotorista");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -86,16 +94,13 @@ export default function WelcomeScreen({ navigation }) {
                 Motorista
               </Text>
               <Text style={styles.textoConteudoMotorista}>
-                Sou motoristas e estou em busca de passageiros.
+                Sou motorista e estou em busca de passageiros.
               </Text>
             </View>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          disabled={!userType}
-          onPress={() => navigation.navigate("LoginUser")}
-        >
+        <TouchableOpacity disabled={!userType} onPress={handleContinue}>
           <View style={styles.continuarBtn}>
             <Text style={styles.btnContinuarText}>Continuar</Text>
           </View>

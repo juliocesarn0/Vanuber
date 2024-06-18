@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import { useFonts } from "expo-font";
-import { useNavigation } from "@react-navigation/native"; // Importe o hook de navegação
-import { SafeAreaView } from "react-native-web";
-import { ScrollView } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import UserContext from "../../context/UserContext";
 import FooterUser from "../../components/FooterUser";
 
 const HomeUser = () => {
@@ -12,57 +11,60 @@ const HomeUser = () => {
     "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
-  const navigation = useNavigation(); // Obtém o objeto de navegação
+  const navigation = useNavigation();
+  const { user } = useContext(UserContext);
 
   const handleContinue = () => {
-    navigation.navigate("DestinoUser"); // Navega para a próxima tela ao clicar no botão
+    navigation.navigate("DestinoUser");
   };
 
   if (!fontsLoaded) {
-    return null; // Ou uma tela de carregamento
+    return null;
   }
 
   return (
-      <View style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.leftHeader}>
-              <Image
-                resizeMode="contain"
-                source={require("../../assets/ricardo.png")}
-                style={styles.avatar}
-              />
-              <Text style={styles.greetingText}>Olá, Ricardo!</Text>
-            </View>
-            <TouchableOpacity style={styles.rightHeader}>
-              <Image
-                resizeMode="contain"
-                source={require("../../assets/sininho.png")}
-                style={styles.icon}
-              />
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.bottomContainer}>
-            <View style={styles.bottomContent}>
-              <Text style={styles.bottomText}>
-                Procure o primeiro destino para encontrar o melhor motorista
-                para lhe atender
-              </Text>
-              <Image
-                resizeMode="contain"
-                source={require("../../assets/motoristazinho.png")} // Imagem do motorista
-                style={styles.bottomImage}
-              />
-            </View>
-            <TouchableOpacity
-              style={styles.continueButton}
-              onPress={handleContinue} // Chama a função ao pressionar o botão
-            >
-              <Text style={styles.continueButtonText}>Procurar Destino</Text>
-            </TouchableOpacity>
-          </View>
-          <FooterUser navigation={navigation} />
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.leftHeader}>
+          <Image
+            resizeMode="contain"
+            source={require("../../assets/ricardo.png")}
+            style={styles.avatar}
+          />
+          <Text style={styles.greetingText}>
+            Olá, {user ? user.primeiroNome : "Usuário"}!
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.rightHeader}>
+          <Image
+            resizeMode="contain"
+            source={require("../../assets/sininho.png")}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
       </View>
+
+      <View style={styles.bottomContainer}>
+        <View style={styles.bottomContent}>
+          <Text style={styles.bottomText}>
+            Procure o primeiro destino para encontrar o melhor motorista para
+            lhe atender
+          </Text>
+          <Image
+            resizeMode="contain"
+            source={require("../../assets/motoristazinho.png")}
+            style={styles.bottomImage}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={handleContinue}
+        >
+          <Text style={styles.continueButtonText}>Procurar Destino</Text>
+        </TouchableOpacity>
+      </View>
+      <FooterUser navigation={navigation} />
+    </View>
   );
 };
 
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    backgroundColor: "#ffffff"
+    backgroundColor: "#ffffff",
   },
   header: {
     flexDirection: "row",
@@ -98,12 +100,12 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   bottomContainer: {
-    backgroundColor: "#fff", // Cor temporária para visualização
+    backgroundColor: "#fff",
     paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 20,
     marginBottom: 20,
-    borderRadius: 15, // Bordas arredondadas
+    borderRadius: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -112,7 +114,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    marginHorizontal: 30, // Margem horizontal para evitar encostar nas laterais
+    marginHorizontal: 30,
     marginVertical: 30,
   },
   bottomContent: {
@@ -124,25 +126,25 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontFamily: "Poppins-Regular",
-    color: "#333333", // Cor do texto
+    color: "#333333",
     marginBottom: 10,
   },
   bottomImage: {
     width: 60,
     height: 60,
-    marginLeft: 10, // Espaçamento à esquerda da imagem
+    marginLeft: 10,
   },
   continueButton: {
-    backgroundColor: "#f2f2f2", // Cor do botão amarelo
+    backgroundColor: "#f2f2f2",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
     borderRadius: 24,
-    marginTop: 10, // Espaçamento acima do botão
+    marginTop: 10,
   },
   continueButtonText: {
     fontSize: 16,
-    color: "#000", // Cor do texto do botão
+    color: "#000",
     fontFamily: "Montserrat-Medium",
   },
 });

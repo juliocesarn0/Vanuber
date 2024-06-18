@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -9,10 +9,13 @@ import {
   Platform,
   FlatList,
   ActivityIndicator,
+  Modal,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import UserContext from "../../context/UserContext";
+import axios from "axios";
 
 const estados = [
   { sigla: "AC", nome: "Acre" },
@@ -44,31 +47,62 @@ const estados = [
   { sigla: "TO", nome: "Tocantins" },
 ];
 
+const periodos = ["Noturno", "Diurno", "Matutino"];
+
 const DestinoUser = () => {
   const navigation = useNavigation();
+  const { user } = useContext(UserContext);
   const [estado, setEstado] = useState("SP");
   const [cidadeBusca, setCidadeBusca] = useState("");
   const [cidades, setCidades] = useState([]);
   const [local, setLocal] = useState("");
-  const [periodoOptionsVisible, setPeriodoOptionsVisible] = useState(false);
   const [periodo, setPeriodo] = useState("");
+  const [periodoOptionsVisible, setPeriodoOptionsVisible] = useState(false);
   const [carregandoCidades, setCarregandoCidades] = useState(false);
   const [escolasUniversidades, setEscolasUniversidades] = useState([]);
   const [carregandoEscolasUniversidades, setCarregandoEscolasUniversidades] =
     useState(false);
 
-  const handleBuscarDestino = () => {
-    navigation.navigate("EnderecoUser");
-  };
+  const handleBuscarDestino = async () => {
+    try {
+      console.log("Enviando dados para criar destino:", {
+        userId: user._id,
+        estado,
+        cidade: cidadeBusca,
+        local,
+        periodo,
+      });
 
-  const selectPeriodo = (value) => {
-    setPeriodo(value);
-    setPeriodoOptionsVisible(false);
+      const response = await axios.post(
+        "http://192.168.15.7:3000/api/destinos",
+        {
+          userId: user._id, // Certifique-se de que user._id é um ObjectId válido
+          estado,
+          cidade: cidadeBusca,
+          local,
+          periodo,
+        }
+      );
+      console.log("Destino salvo com sucesso:", response.data);
+      navigation.navigate("EnderecoUser");
+    } catch (error) {
+      console.error("Erro ao salvar destino:", error);
+    }
   };
 
   const handleCidadeSelecionada = (cidadeNome) => {
-    setCidadeBusca(cidadeNome); // Atualiza o campo de busca com o nome da cidade selecionada
-    setCidades([]); // Limpa a lista de sugestões
+    setCidadeBusca(cidadeNome);
+    setCidades([]);
+  };
+
+  const handleLocalSelecionado = (localNome) => {
+    setLocal(localNome);
+    setEscolasUniversidades([]);
+  };
+
+  const handlePeriodoSelecionado = (periodo) => {
+    setPeriodo(periodo);
+    setPeriodoOptionsVisible(false);
   };
 
   useEffect(() => {
@@ -98,7 +132,7 @@ const DestinoUser = () => {
 
   useEffect(() => {
     const buscarEscolasUniversidades = async () => {
-      if (cidadeBusca && estado) {
+      if (cidadeBusca && estado && local.length >= 3) {
         setCarregandoEscolasUniversidades(true);
         try {
           const response = await fetch(
@@ -110,9 +144,12 @@ const DestinoUser = () => {
             );
           }
           const data = await response.json();
-          const escolas = data.escolas[1]; // Obtendo o array de escolas da resposta
-          const universidades = data.universidades; // Obtendo o array de universidades da resposta
-          setEscolasUniversidades([...escolas, ...universidades]); // Combinando as listas
+          const escolas = data.escolas;
+          const universidades = data.universidades;
+          const locaisFiltrados = [...escolas, ...universidades].filter(
+            (item) => item.nome.toLowerCase().includes(local.toLowerCase())
+          );
+          setEscolasUniversidades(locaisFiltrados);
         } catch (error) {
           console.error(error);
           setEscolasUniversidades([]);
@@ -127,7 +164,7 @@ const DestinoUser = () => {
     const debounceTimeout = setTimeout(buscarEscolasUniversidades, 300);
 
     return () => clearTimeout(debounceTimeout);
-  }, [estado, cidadeBusca]);
+  }, [estado, cidadeBusca, local]);
 
   return (
     <KeyboardAvoidingView
@@ -180,6 +217,7 @@ const DestinoUser = () => {
             }
           />
         )}
+
         <Text style={styles.label}>Local (Escolas/Universidades):</Text>
         <TextInput
           style={styles.input}
@@ -195,9 +233,11 @@ const DestinoUser = () => {
             data={escolasUniversidades}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <Text style={styles.escolaItem}>
-                {item.nome ? item.nome : item.facul}
-              </Text>
+              <TouchableOpacity
+                onPress={() => handleLocalSelecionado(item.nome)}
+              >
+                <Text style={styles.escolaItem}>{item.nome}</Text>
+              </TouchableOpacity>
             )}
             ListEmptyComponent={() =>
               !carregandoEscolasUniversidades && local.length >= 3 ? (
@@ -214,7 +254,9 @@ const DestinoUser = () => {
           style={styles.input}
           onPress={() => setPeriodoOptionsVisible(true)}
         >
-          <Text style={styles.periodoText}>{periodo}</Text>
+          <Text style={styles.periodoText}>
+            {periodo || "Selecione o período"}
+          </Text>
           <Icon
             name="caret-down"
             size={20}
@@ -227,6 +269,27 @@ const DestinoUser = () => {
       <TouchableOpacity style={styles.button} onPress={handleBuscarDestino}>
         <Text style={styles.buttonText}>Continuar</Text>
       </TouchableOpacity>
+
+      <Modal
+        transparent={true}
+        visible={periodoOptionsVisible}
+        animationType="slide"
+        onRequestClose={() => setPeriodoOptionsVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            {periodos.map((periodoOption) => (
+              <TouchableOpacity
+                key={periodoOption}
+                style={styles.modalOption}
+                onPress={() => handlePeriodoSelecionado(periodoOption)}
+              >
+                <Text style={styles.modalOptionText}>{periodoOption}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 };
@@ -279,18 +342,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalContainer: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 20,
+    width: "80%",
   },
   modalOption: {
-    backgroundColor: "#FFFFFF",
-    paddingVertical: 20,
-    paddingHorizontal: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: "#8A898E",
-    width: "100%",
+    paddingVertical: 10,
   },
   modalOptionText: {
     fontSize: 16,

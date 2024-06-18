@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -11,9 +11,12 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { TextInputMask } from "react-native-masked-text";
+import UserContext from "../../context/UserContext";
+import axios from "axios";
 
 const EnderecoUser = () => {
   const navigation = useNavigation();
+  const { user } = useContext(UserContext);
   const [cep, setCep] = useState("");
   const [rua, setRua] = useState("");
   const [numero, setNumero] = useState("");
@@ -26,7 +29,6 @@ const EnderecoUser = () => {
       const cleanedCep = cep.replace("-", "");
       console.log(`Verificando CEP: ${cleanedCep}`);
       if (cleanedCep.length === 8) {
-        // Verifica se o CEP tem 8 dígitos
         console.log(`Buscando endereço para o CEP: ${cleanedCep}`);
         try {
           const response = await fetch(
@@ -54,9 +56,32 @@ const EnderecoUser = () => {
     buscarEndereco();
   }, [cep]);
 
-  const handleContinuar = () => {
-    // Navegar para a tela "ListaMotorista.js" após continuar
-    navigation.navigate("ListaMotorista", { cep, rua, numero, bairro, cidade });
+  const handleContinuar = async () => {
+    try {
+      const response = await axios.post(
+        "http://192.168.15.7:3000/api/enderecos",
+        {
+          userId: user._id,
+          cep,
+          rua,
+          numero,
+          bairro,
+          cidade,
+          estado,
+        }
+      );
+      console.log("Endereço salvo com sucesso:", response.data);
+      navigation.navigate("ListaMotorista", {
+        cep,
+        rua,
+        numero,
+        bairro,
+        cidade,
+      });
+    } catch (error) {
+      console.error("Erro ao salvar endereço:", error);
+      Alert.alert("Erro", "Não foi possível salvar o endereço");
+    }
   };
 
   return (
@@ -92,17 +117,17 @@ const EnderecoUser = () => {
             <Text style={styles.label}>Bairro:</Text>
             <TextInput
               style={styles.input}
-              value={numero}
-              onChangeText={(text) => setNumero(text)}
-              keyboardType="numeric"
+              value={bairro}
+              onChangeText={(text) => setBairro(text)}
             />
           </View>
           <View style={[styles.inputContainer, { flex: 1, marginLeft: 10 }]}>
             <Text style={styles.label}>Número:</Text>
             <TextInput
               style={styles.input}
-              value={bairro}
-              onChangeText={(text) => setBairro(text)}
+              value={numero}
+              onChangeText={(text) => setNumero(text)}
+              keyboardType="numeric"
             />
           </View>
         </View>
